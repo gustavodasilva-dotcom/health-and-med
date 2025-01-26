@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Modules.Doctors.Domain.Entities;
+using Modules.Doctors.Persistence.Constants;
+
+namespace Modules.Doctors.Persistence;
+
+internal sealed class DoctorsDbContext(DbContextOptions<DoctorsDbContext> options)
+    : DbContext(options)
+{
+    public DbSet<Doctor> Doctors { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.HasDefaultSchema(PersistenceConstants.DefaultSchema);
+        
+        builder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+    }
+}
