@@ -1,5 +1,5 @@
-﻿using Common.Shared.Security;
-using FastEndpoints;
+﻿using Carter;
+using Common.Shared.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,19 +15,24 @@ public static class DependencyInjectionExtensions
     {
         services.AddProblemDetails();
 
-        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<TokenProvider>();
 
         services.AddDoctors(configuration);
+
+        services.AddCarter(
+            new DependencyContextAssemblyCatalog(
+                [Modules.Doctors.Endpoints.AssemblyReference.Assembly]));
 
         return services;
     }
 
     public static void UseApplicationServices(this WebApplication app)
     {
+        app.MapCarter();
+        
         app.UseStatusCodePages();
 
         app.UseDoctors();
-
-        app.UseFastEndpoints();
     }
 }

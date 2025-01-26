@@ -1,33 +1,35 @@
-﻿using Common.Shared.Extensions;
-using FastEndpoints;
+﻿using Carter;
+using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Modules.Doctors.Application.Doctors.Commands.RegisterDoctor;
 using Modules.Doctors.Endpoints.Routes;
 
 namespace Modules.Doctors.Endpoints.Doctors;
 
-public sealed class RegisterDoctor(ISender sender) : Endpoint<RegisterDoctorCommand>
+public sealed class RegisterDoctor : ICarterModule
 {
-    private readonly ISender _sender = sender;
-
-    public override void Configure()
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        Post(DoctorRoutes.RegisterDoctor);
-        AllowAnonymous();
-    }
-
-    public override async Task HandleAsync(
-        RegisterDoctorCommand req,
-        CancellationToken ct)
-    {
-        var result = await _sender.Send(req, ct);
-        if (result.IsFailure)
+        app.MapPost(DoctorRoutes.RegisterDoctor, async (
+            ISender sender,
+            [FromBody] RegisterDoctorRequest request) =>
         {
-            await this.SendResultAsync(result, ct);
-        }
-        else
-        {
-            await this.SendCreatedAsync(ct);
-        }
+            var command = request.Adapt<RegisterDoctorCommand>();
+            var result = await sender.Send(command);
+            if (result.IsFailure)
+            {
+                return Results.BadRequest(result.Error);
+            }
+            else
+            {
+                return Results.Created();
+            }
+        })
+        .WithTags(DoctorRoutes.Tags)
+        .AllowAnonymous();
     }
 }

@@ -1,6 +1,5 @@
 using Common.Shared;
 using Common.Shared.Constants;
-using Common.Shared.Repositories;
 using Common.Shared.Security;
 using MediatR;
 using Modules.Doctors.Domain.Abstractions;
@@ -16,7 +15,7 @@ internal sealed class RegisterDoctorCommandHandler(
 {
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
     private readonly IDoctorRepository _doctorRepository = doctorRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IDoctorsUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result> Handle(
         RegisterDoctorCommand request,

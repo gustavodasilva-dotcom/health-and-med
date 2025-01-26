@@ -3,7 +3,7 @@ using Modules.Doctors.Domain.Enums;
 
 namespace Modules.Doctors.Domain.Entities;
 
-public sealed class Doctor : BaseEntity
+public sealed class Doctor : UserEntity
 {
     public required string Name { get; set; }
 
@@ -12,8 +12,6 @@ public sealed class Doctor : BaseEntity
     public required UFs CrmUf { get; set; }
 
     public required int Crm { get; set; }
-
-    public required string Email { get; set; }
 
     public required string Password { get; set; }
 

@@ -9,4 +9,6 @@ public interface IDoctorRepository : IRepository<Doctor>
     bool ExistsWithEmail(string email);
 
     bool ExistsWithCrmInUf(UFs uf, int crm);
+
+    Doctor? GetWithEmail(string email);
 }

@@ -16,4 +16,8 @@ internal sealed class DoctorRepository(DoctorsDbContext dbContext) :
     public bool ExistsWithEmail(string email)
         => DbContext.Doctors
             .Any(doctor => doctor.Email == email);
+
+    public Doctor? GetWithEmail(string email)
+        => DbContext.Doctors
+            .SingleOrDefault(doctor => doctor.Email == email);
 }

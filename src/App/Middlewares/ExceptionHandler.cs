@@ -1,7 +1,7 @@
-using FastEndpoints;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
-namespace App.Extensions;
+namespace App.Middlewares;
 
 internal sealed class ExceptionHandler : IExceptionHandler
 {
