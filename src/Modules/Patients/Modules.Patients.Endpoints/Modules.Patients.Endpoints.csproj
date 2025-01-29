@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carter" Version="8.1.0" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Patients.Application\Modules.Patients.Application.csproj" />
     <ProjectReference Include="..\..\..\Common\Common.Shared\Common.Shared.csproj" />
   </ItemGroup>
 
