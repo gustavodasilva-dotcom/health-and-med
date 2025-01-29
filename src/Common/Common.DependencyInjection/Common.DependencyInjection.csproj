@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common.Shared\Common.Shared.csproj" />
     <ProjectReference Include="..\..\Modules\Doctors\Modules.Doctors.CrossCutting.DependencyInjection\Modules.Doctors.CrossCutting.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\Modules\Patients\Modules.Patients.CrossCutting.DependencyInjection\Modules.Patients.CrossCutting.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Patients.Persistence\Modules.Patients.Persistence.csproj" />
+    <ProjectReference Include="..\Modules.Patients.Endpoints\Modules.Patients.Endpoints.csproj" />
+  </ItemGroup>
+
 </Project>

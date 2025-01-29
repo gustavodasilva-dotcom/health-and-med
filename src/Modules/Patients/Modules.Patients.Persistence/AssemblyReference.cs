@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Modules.Doctors.Persistence;
+namespace Modules.Patients.Persistence;
 
 public static class AssemblyReference
 {
