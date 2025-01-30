@@ -1,4 +1,5 @@
 ﻿using Carter;
+using Common.DependencyInjection.Extensions;
 using Common.Shared.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ public static class DependencyInjectionExtensions
         services.AddSingleton<TokenProvider>();
 
         services
+            .AddMessaging()
             .AddDoctors(configuration)
             .AddPatients(configuration);
 

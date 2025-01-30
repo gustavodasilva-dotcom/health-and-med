@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Modules.Patients.Persistence\Modules.Patients.Persistence.csproj" />
     <ProjectReference Include="..\Modules.Patients.Endpoints\Modules.Patients.Endpoints.csproj" />
+    <ProjectReference Include="..\Modules.Patients.Application\Modules.Patients.Application.csproj" />
   </ItemGroup>
 
 </Project>

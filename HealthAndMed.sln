@@ -43,6 +43,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2D9C89B4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTests", "tests\ArchitectureTests\ArchitectureTests.csproj", "{D6F3798D-505C-496D-931A-924C0DFF8815}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Doctors.IntegrationEvents", "src\Modules\Doctors\Modules.Doctors.IntegrationEvents\Modules.Doctors.IntegrationEvents.csproj", "{00443AF6-D67E-4F23-98B2-804D63ED6067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Patients.IntegrationEvents", "src\Modules\Patients\Modules.Patients.IntegrationEvents\Modules.Patients.IntegrationEvents.csproj", "{E9F4A776-608C-4D15-9BCB-B5336CA94633}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +112,14 @@ Global
 		{D6F3798D-505C-496D-931A-924C0DFF8815}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6F3798D-505C-496D-931A-924C0DFF8815}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6F3798D-505C-496D-931A-924C0DFF8815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00443AF6-D67E-4F23-98B2-804D63ED6067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00443AF6-D67E-4F23-98B2-804D63ED6067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00443AF6-D67E-4F23-98B2-804D63ED6067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00443AF6-D67E-4F23-98B2-804D63ED6067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9F4A776-608C-4D15-9BCB-B5336CA94633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9F4A776-608C-4D15-9BCB-B5336CA94633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9F4A776-608C-4D15-9BCB-B5336CA94633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9F4A776-608C-4D15-9BCB-B5336CA94633}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F9E5F3B1-39C5-4A78-BF24-3C7026CE99FD} = {BFED368A-7CBB-403D-AE91-457F337B7505}
@@ -128,5 +140,7 @@ Global
 		{B1AA8B4D-D765-4AC4-BCBC-0C9723CA25F2} = {7B50E925-1418-457D-AF34-D4B0AC105BF5}
 		{9D9706AB-3560-4DB5-90A9-A657461D8A90} = {7B50E925-1418-457D-AF34-D4B0AC105BF5}
 		{D6F3798D-505C-496D-931A-924C0DFF8815} = {2D9C89B4-FBDD-434A-A914-7ABBCC37076E}
+		{00443AF6-D67E-4F23-98B2-804D63ED6067} = {CF1786B7-C18F-4AF2-A162-7E90941533BF}
+		{E9F4A776-608C-4D15-9BCB-B5336CA94633} = {7B50E925-1418-457D-AF34-D4B0AC105BF5}
 	EndGlobalSection
 EndGlobal

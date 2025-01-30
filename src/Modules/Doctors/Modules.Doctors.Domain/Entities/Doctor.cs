@@ -15,6 +15,9 @@ public sealed class Doctor : UserEntity
 
     public required string Password { get; set; }
 
+    public override IEnumerable<object> GetAtomicValues()
+        => [CrmUf, Crm];
+
     public void Update(string name, string cpf, UFs crmUf, int crm, string email)
     {
         Name = name.Trim();
