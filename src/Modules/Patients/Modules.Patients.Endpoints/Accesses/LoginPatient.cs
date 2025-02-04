@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Modules.Doctors.Application.Doctors.Commands.LoginDoctor;
-using Modules.Doctors.Endpoints.Routes;
+using Modules.Patients.Application.Accesses.Commands.LoginPatient;
+using Modules.Patients.Endpoints.Routes;
 
-namespace Modules.Doctors.Endpoints.Doctors;
+namespace Modules.Patients.Endpoints.Accesses;
 
 public sealed class LoginDoctor : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(DoctorRoutes.LoginDoctor, async (
+        app.MapPost(AccessesRoutes.LoginPatient, async (
             ISender sender,
-            [FromBody] LoginDoctorRequest request) =>
+            [FromBody] LoginPatientRequest request) =>
         {
-            var command = request.Adapt<LoginDoctorCommand>();
+            var command = request.Adapt<LoginPatientCommand>();
             var result = await sender.Send(command);
             if (result.IsFailure)
             {
@@ -29,7 +29,7 @@ public sealed class LoginDoctor : ICarterModule
                 return Results.Ok(result.Value);
             }
         })
-        .WithTags(DoctorRoutes.Tags)
+        .WithTags(AccessesRoutes.Tags)
         .AllowAnonymous();
     }
 }

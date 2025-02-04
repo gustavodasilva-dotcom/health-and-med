@@ -15,7 +15,7 @@ public sealed class GetAppointments : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet(AppointmentRoutes.GetAppointments, async (
+        app.MapGet(AppointmentsRoutes.GetAppointments, async (
             ISender sender,
             [FromRoute] DateTime from,
             [FromRoute] DateTime to) =>
@@ -35,7 +35,7 @@ public sealed class GetAppointments : ICarterModule
             //     return Results.Ok(result);
             // }
         })
-        .WithTags(AppointmentRoutes.Tags)
+        .WithTags(AppointmentsRoutes.Tags)
         .WithMetadata(new AuthorizeAttribute(SecurityPolices.DoctorsOnly))
         .RequireAuthorization();
     }

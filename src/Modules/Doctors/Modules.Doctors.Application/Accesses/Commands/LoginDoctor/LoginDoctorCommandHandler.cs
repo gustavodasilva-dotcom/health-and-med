@@ -4,7 +4,7 @@ using Common.Shared.Security;
 using MediatR;
 using Modules.Doctors.Domain.Abstractions;
 
-namespace Modules.Doctors.Application.Doctors.Commands.LoginDoctor;
+namespace Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
 
 internal sealed class LoginDoctorCommandHandler(
     IPasswordHasher passwordHasher,

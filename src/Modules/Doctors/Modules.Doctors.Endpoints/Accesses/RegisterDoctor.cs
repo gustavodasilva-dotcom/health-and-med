@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Modules.Doctors.Application.Doctors.Commands.RegisterDoctor;
+using Modules.Doctors.Application.Accesses.Commands.RegisterDoctor;
 using Modules.Doctors.Endpoints.Routes;
 
-namespace Modules.Doctors.Endpoints.Doctors;
+namespace Modules.Doctors.Endpoints.Accesses;
 
 public sealed class RegisterDoctor : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(DoctorRoutes.RegisterDoctor, async (
+        app.MapPost(AccessesRoutes.RegisterDoctor, async (
             ISender sender,
             [FromBody] RegisterDoctorRequest request) =>
         {
@@ -29,7 +29,7 @@ public sealed class RegisterDoctor : ICarterModule
                 return Results.Created();
             }
         })
-        .WithTags(DoctorRoutes.Tags)
+        .WithTags(AccessesRoutes.Tags)
         .AllowAnonymous();
     }
 }

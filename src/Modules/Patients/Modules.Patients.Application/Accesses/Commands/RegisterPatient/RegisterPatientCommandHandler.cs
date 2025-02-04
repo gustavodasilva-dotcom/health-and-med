@@ -1,51 +1,50 @@
 using Common.Shared;
 using Common.Shared.Constants;
+using Common.Shared.Repositories;
 using Common.Shared.Security;
 using MediatR;
-using Modules.Doctors.Domain.Abstractions;
-using Modules.Doctors.Domain.Entities;
+using Modules.Patients.Domain.Abstractions;
+using Modules.Patients.Domain.Entities;
 
-namespace Modules.Doctors.Application.Doctors.Commands.RegisterDoctor;
+namespace Modules.Patients.Application.Accesses.Commands.RegisterPatient;
 
-internal sealed class RegisterDoctorCommandHandler(
+internal sealed class RegisterPatientCommandHandler(
     IPasswordHasher passwordHasher,
-    IDoctorRepository doctorRepository,
-    IDoctorsUnitOfWork unitOfWork) :
-    IRequestHandler<RegisterDoctorCommand, Result>
+    IPatientRepository patientRepository,
+    IPatientsUnitOfWork unitOfWork) :
+    IRequestHandler<RegisterPatientCommand, Result>
 {
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
-    private readonly IDoctorRepository _doctorRepository = doctorRepository;
-    private readonly IDoctorsUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IPatientRepository _patientRepository = patientRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result> Handle(
-        RegisterDoctorCommand request,
+        RegisterPatientCommand request,
         CancellationToken cancellationToken)
     {
-        if (_doctorRepository.ExistsWithEmail(request.Email))
+        if (_patientRepository.ExistsWithEmail(request.Email))
         {
             return new Error(
                 ErrorConstants.InvalidOperationTitle,
                 "The email is already in use.");
         }
 
-        if (_doctorRepository.ExistsWithCrmInUf(request.CrmUf, request.Crm))
+        if (_patientRepository.ExistsWithCpf(request.Cpf))
         {
             return new Error(
                 ErrorConstants.InvalidOperationTitle,
-                "The CRM is already in use.");
+                "The CPF is already in use.");
         }
 
-        var doctor = new Doctor
+        var patient = new Patient
         {
             Name = request.Name.Trim(),
             Cpf = request.Cpf.Trim(),
-            CrmUf = request.CrmUf,
-            Crm = request.Crm,
             Email = request.Email.Trim(),
             Password = _passwordHasher.Hash(request.Password.Trim())
         };
 
-        _doctorRepository.Add(doctor);
+        _patientRepository.Add(patient);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

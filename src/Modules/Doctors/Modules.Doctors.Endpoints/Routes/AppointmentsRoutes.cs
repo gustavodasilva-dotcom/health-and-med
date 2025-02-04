@@ -1,6 +1,6 @@
 namespace Modules.Doctors.Endpoints.Routes;
 
-internal static class AppointmentRoutes
+internal static class AppointmentsRoutes
 {
     public const string Tags = nameof(Appointments);
 

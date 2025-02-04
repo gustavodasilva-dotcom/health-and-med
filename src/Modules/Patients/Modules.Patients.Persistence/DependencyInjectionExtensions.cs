@@ -21,7 +21,8 @@ public static class DependencyInjectionsExtensions
                     x => x.MigrationsHistoryTable(
                         PersistenceConstants.MigrationsHistoryTable,
                         PersistenceConstants.DefaultSchema)))
-            .AddScoped<IPatientsUnitOfWork, PatientsUnitOfWork>();
+            .AddScoped<IPatientsUnitOfWork, PatientsUnitOfWork>()
+            .AddScoped<IPatientRepository, PatientRepository>();
 
     public static void UsePersistence(this IApplicationBuilder app)
         => app.ApplyMigrations<PatientsDbContext>();

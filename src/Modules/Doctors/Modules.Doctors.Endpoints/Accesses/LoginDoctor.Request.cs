@@ -1,4 +1,4 @@
-namespace Modules.Doctors.Endpoints.Doctors;
+namespace Modules.Doctors.Endpoints.Accesses;
 
 internal sealed class LoginDoctorRequest
 {
