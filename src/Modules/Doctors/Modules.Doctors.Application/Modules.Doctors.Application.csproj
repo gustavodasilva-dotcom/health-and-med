@@ -1,18 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MediatR" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MediatR" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\Common.Shared\Common.Shared.csproj" />
-    <ProjectReference Include="..\Modules.Doctors.Domain\Modules.Doctors.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\Common.Shared\Common.Shared.csproj" />
+		<ProjectReference Include="..\Modules.Doctors.Domain\Modules.Doctors.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="ArchitectureTests" />
+	</ItemGroup>
 
 </Project>
