@@ -11,7 +11,7 @@ using Modules.Doctors.Endpoints.Routes;
 
 namespace Modules.Doctors.Endpoints.Appointments
 {
-    internal sealed class UpdateAppointment : ICarterModule
+    public sealed class UpdateAppointment : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
