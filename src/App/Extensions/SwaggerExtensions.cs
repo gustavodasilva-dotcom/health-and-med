@@ -9,11 +9,15 @@ internal static class SwaggerExtensions
     {
         services.AddSwaggerGen(options =>
         {
+            options.EnableAnnotations();
+
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
                 Title = "Health&Med API",
-                Description = "Health&Med's ASP.NET Core Web API developed for the FIAP Pós Tech's Hackathon"
+                Description = @"
+                    PT: API Web ASP.NET Core da Health&Med, desenvolvida para o Hackathon da FIAP Pós Tech.
+                    EN: Health&Med's ASP.NET Core Web API developed for the FIAP Pós Tech's Hackathon."
             });
 
             options.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));

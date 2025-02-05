@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Carter" />
     <PackageReference Include="Mapster" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
   </ItemGroup>
 
   <ItemGroup>

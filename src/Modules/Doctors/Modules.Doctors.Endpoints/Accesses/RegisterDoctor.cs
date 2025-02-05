@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Modules.Doctors.Application.Accesses.Commands.RegisterDoctor;
 using Modules.Doctors.Endpoints.Routes;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Modules.Doctors.Endpoints.Accesses;
 
@@ -14,9 +15,19 @@ public sealed class RegisterDoctor : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(AccessesRoutes.RegisterDoctor, async (
-            ISender sender,
-            [FromBody] RegisterDoctorRequest request) =>
+        app.MapPost(AccessesRoutes.RegisterDoctor,
+            [SwaggerOperation(
+                Summary = "PT: cadastro de médico. EN: doctor's registration.",
+                Description = @"
+                    PT: cadastre um novo médico, informando tanto credenciais de acesso quanto informações profissionais.
+                    EN: register a new doctor, informing both access credentials and professional information.")]
+            [SwaggerResponse(StatusCodes.Status201Created)]
+            [SwaggerResponse(StatusCodes.Status400BadRequest)]
+            [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+            async (
+                ISender sender,
+                [FromBody] RegisterDoctorRequest request
+            ) =>
         {
             var command = request.Adapt<RegisterDoctorCommand>();
             var result = await sender.Send(command);
