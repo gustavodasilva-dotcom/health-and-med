@@ -1,6 +1,7 @@
 ﻿using Common.Shared;
 using Common.Shared.Constants;
 using Modules.Doctors.Application.Appointments.Commands.Delete;
+using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
 using Moq;

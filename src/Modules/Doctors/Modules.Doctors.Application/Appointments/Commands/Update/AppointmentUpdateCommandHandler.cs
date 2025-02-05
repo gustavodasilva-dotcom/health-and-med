@@ -1,6 +1,7 @@
 ﻿using Common.Shared;
 using Common.Shared.Constants;
 using MediatR;
+using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
 

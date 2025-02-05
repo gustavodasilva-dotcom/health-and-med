@@ -4,6 +4,7 @@ using Common.Shared;
 using Common.Shared.Constants;
 using Moq;
 using Modules.Doctors.Application.Appointments.Commands.Update;
+using Modules.Doctors.Application.Constants;
 
 namespace ArchitectureTests.Modules.Doctors.Commands
 {

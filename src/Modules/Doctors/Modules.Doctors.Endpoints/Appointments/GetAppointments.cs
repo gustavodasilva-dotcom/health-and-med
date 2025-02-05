@@ -20,20 +20,16 @@ public sealed class GetAppointments : ICarterModule
             [FromRoute] DateTime from,
             [FromRoute] DateTime to) =>
         {
-            await sender.Send(new GetAppointmentsQuery(from, to));
+            var result = await sender.Send(new GetAppointmentsQuery(from, to));
 
-            return Results.NoContent();
-
-            // TODO: implement handling where, if there's no appointments, return a 204 NoContent:
-            //
-            // if (!result.Any())
-            // {
-            //     return Results.NoContent();
-            // }
-            // else
-            // {
-            //     return Results.Ok(result);
-            // }
+            if (!result.Any())
+            {
+                return Results.NoContent();
+            }
+            else
+            {
+                return Results.Ok(result);
+            }
         })
         .WithTags(AppointmentsRoutes.Tags)
         .WithMetadata(new AuthorizeAttribute(SecurityPolices.DoctorsOnly))
