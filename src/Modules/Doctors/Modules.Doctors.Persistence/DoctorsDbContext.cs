@@ -13,6 +13,8 @@ internal sealed class DoctorsDbContext(
 {
     public DbSet<Doctor> Doctors { get; set; }
 
+    public DbSet<DoctorRegistration> DoctorsRegistrations { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.HasDefaultSchema(PersistenceConstants.DefaultSchema);

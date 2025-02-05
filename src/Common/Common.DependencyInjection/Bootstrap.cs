@@ -22,13 +22,9 @@ public static class DependencyInjectionExtensions
 
         services
             .AddMessaging()
+            .AddEndpointsDependencies()
             .AddDoctors(configuration)
             .AddPatients(configuration);
-
-        services.AddCarter(
-            new DependencyContextAssemblyCatalog(
-                [Modules.Doctors.Endpoints.AssemblyReference.Assembly,
-                Modules.Patients.Endpoints.AssemblyReference.Assembly]));
 
         return services;
     }

@@ -2,6 +2,7 @@ using Common.Shared;
 using Common.Shared.Constants;
 using Common.Shared.Security;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Modules.Doctors.Domain.Abstractions;
 
 namespace Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
@@ -24,14 +25,15 @@ internal sealed class LoginDoctorCommandHandler(
         if (doctor is null)
         {
             return new Error(
-                ErrorConstants.NotFoundTitle,
-                "No doctor was found with the given email.");
+                SharedErrorConstants.NotFoundTitle,
+                "No doctor was found with the given email.",
+                StatusCodes.Status404NotFound);
         }
 
         if (!_passwordHasher.Verify(request.Password.Trim(), doctor.Password))
         {
             return new Error(
-                ErrorConstants.InvalidOperationTitle,
+                SharedErrorConstants.InvalidOperationTitle,
                 "The given password is incorrect.");
         }
 

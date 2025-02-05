@@ -7,12 +7,13 @@ internal sealed class RegisterDoctorRequest
 {
     public required string Name { get; init; }
 
-    public required string Cpf { get; init; }
+    public required string Ssn { get; init; }
 
-    [JsonPropertyName("crm_uf")]
-    public UFs CrmUf { get; init; }
+    [JsonPropertyName("registration_state")]
+    public UFs RegistrationState { get; init; }
     
-    public int Crm { get; init; }
+    [JsonPropertyName("registration_number")]
+    public int RegistrationNumber { get; init; }
 
     public required string Email { get; init; }
     

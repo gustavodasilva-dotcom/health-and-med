@@ -24,18 +24,18 @@ internal sealed class LoginPatientCommandHandler(
         if (doctor is null)
         {
             return new Error(
-                ErrorConstants.NotFoundTitle,
+                SharedErrorConstants.NotFoundTitle,
                 "No patient was found with the given email.");
         }
 
         if (!_passwordHasher.Verify(request.Password.Trim(), doctor.Password))
         {
             return new Error(
-                ErrorConstants.InvalidOperationTitle,
+                SharedErrorConstants.InvalidOperationTitle,
                 "The given password is incorrect.");
         }
 
-        var token = _tokenProvider.Create(doctor, UserRoles.Doctor);
+        var token = _tokenProvider.Create(doctor, UserRoles.Patient);
 
         return await Task.FromResult(token);
     }

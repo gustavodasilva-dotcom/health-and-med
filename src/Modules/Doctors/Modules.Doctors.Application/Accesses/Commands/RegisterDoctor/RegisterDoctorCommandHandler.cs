@@ -2,6 +2,7 @@ using Common.Shared;
 using Common.Shared.Constants;
 using Common.Shared.Security;
 using MediatR;
+using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
 
@@ -24,26 +25,32 @@ internal sealed class RegisterDoctorCommandHandler(
         if (_doctorRepository.ExistsWithEmail(request.Email))
         {
             return new Error(
-                ErrorConstants.InvalidOperationTitle,
-                "The email is already in use.");
+                SharedErrorConstants.InvalidOperationTitle,
+                "The informed email is already in use.");
         }
 
-        if (_doctorRepository.ExistsWithCrmInUf(request.CrmUf, request.Crm))
+        if (_doctorRepository.ExistsWithSsn(request.Ssn))
         {
             return new Error(
-                ErrorConstants.InvalidOperationTitle,
-                "The CRM is already in use.");
+                SharedErrorConstants.InvalidOperationTitle,
+                "The informed Social Security Number is already in use.");
+        }
+
+        if (_doctorRepository.IsRegisteredInState(request.RegistrationNumber, request.RegistrationState))
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                ErrorConstants.RegistrationNumberIsRegisteredInStateMessage);
         }
 
         var doctor = new Doctor
         {
             Name = request.Name.Trim(),
-            Cpf = request.Cpf.Trim(),
-            CrmUf = request.CrmUf,
-            Crm = request.Crm,
+            Ssn = request.Ssn.Trim(),
             Email = request.Email.Trim(),
             Password = _passwordHasher.Hash(request.Password.Trim())
         };
+        doctor.AddRegistration(request.RegistrationNumber, request.RegistrationState);
 
         _doctorRepository.Add(doctor);
 

@@ -5,26 +5,38 @@ namespace Modules.Doctors.Domain.Entities;
 
 public sealed class Doctor : UserEntity
 {
+    private readonly HashSet<DoctorRegistration> _registrations = [];
+
     public required string Name { get; set; }
 
-    public required string Cpf { get; set; }
-
-    public required UFs CrmUf { get; set; }
-
-    public required int Crm { get; set; }
+    public required string Ssn { get; set; }
 
     public required string Password { get; set; }
 
     public override IEnumerable<object> GetAtomicValues()
-        => [CrmUf, Crm];
+        => [Ssn];
 
-    public void Update(string name, string cpf, UFs crmUf, int crm, string email)
+    public IReadOnlySet<DoctorRegistration> Registrations
+        => _registrations;
+
+    public void Update(string name, string ssn, string email)
     {
         Name = name.Trim();
-        Cpf = cpf.Trim();
-        CrmUf = crmUf;
-        Crm = crm;
+        Ssn = ssn.Trim();
         Email = email.Trim();
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    public DoctorRegistration AddRegistration(int registrationNumber, UFs registrationState)
+    {
+        var registration = new DoctorRegistration
+        {
+            Number = registrationNumber,
+            State = registrationState
+        };
+
+        _registrations.Add(registration);
+
+        return registration;
     }
 }

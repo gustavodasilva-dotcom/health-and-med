@@ -16,7 +16,7 @@ internal sealed class DoctorConfigurations : BaseEntityTypeConfiguration<Doctor>
             .HasMaxLength(DatabaseConstants.MaxLength70);
 
         builder
-            .Property(x => x.Cpf)
+            .Property(x => x.Ssn)
             .HasMaxLength(DatabaseConstants.MaxLength11);
 
         builder
@@ -28,11 +28,16 @@ internal sealed class DoctorConfigurations : BaseEntityTypeConfiguration<Doctor>
             .HasMaxLength(DatabaseConstants.MaxLength97);
 
         builder
-            .HasIndex(p => new
-            {
-                p.CrmUf,
-                p.Crm
-            })
+            .HasIndex(p => p.Ssn)
             .IsUnique();
+
+        builder
+            .HasIndex(p => p.Email)
+            .IsUnique();
+
+        builder
+            .HasMany(doctor => doctor.Registrations)
+            .WithOne(registration => registration.Doctor)
+            .HasForeignKey(registration => registration.DoctorId);
     }
 }

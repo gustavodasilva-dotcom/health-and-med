@@ -1,0 +1,40 @@
+using Carter;
+using Common.Shared.Constants;
+using MapsterMapper;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Modules.Doctors.Application.Registrations.Commands.AddRegistration;
+using Modules.Doctors.Endpoints.Routes;
+
+namespace Modules.Doctors.Endpoints.Registrations;
+
+public sealed class AddRegistration : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost(RegistrationsRoutes.AddRegistration, async (
+            ISender sender,
+            IMapper mapper,
+            [FromRoute] Guid doctorId,
+            [FromBody] AddRegistrationRequest request) =>
+        {
+            var command = mapper.Map<AddRegistrationCommand>((doctorId, request));
+            var result = await sender.Send(command);
+            if (result.IsFailure)
+            {
+                return Results.BadRequest(result.Error);
+            }
+            else
+            {
+                return Results.Created();
+            }
+        })
+        .WithTags(RegistrationsRoutes.Tags)
+        .WithMetadata(new AuthorizeAttribute(SecurityPolices.DoctorsOnly))
+        .RequireAuthorization();
+    }
+}

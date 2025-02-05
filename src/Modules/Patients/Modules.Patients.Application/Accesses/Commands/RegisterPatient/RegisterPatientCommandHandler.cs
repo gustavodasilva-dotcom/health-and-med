@@ -25,14 +25,14 @@ internal sealed class RegisterPatientCommandHandler(
         if (_patientRepository.ExistsWithEmail(request.Email))
         {
             return new Error(
-                ErrorConstants.InvalidOperationTitle,
+                SharedErrorConstants.InvalidOperationTitle,
                 "The email is already in use.");
         }
 
         if (_patientRepository.ExistsWithCpf(request.Cpf))
         {
             return new Error(
-                ErrorConstants.InvalidOperationTitle,
+                SharedErrorConstants.InvalidOperationTitle,
                 "The CPF is already in use.");
         }
 
