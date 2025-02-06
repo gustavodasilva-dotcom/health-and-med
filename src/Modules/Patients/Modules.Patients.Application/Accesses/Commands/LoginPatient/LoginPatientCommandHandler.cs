@@ -8,12 +8,12 @@ namespace Modules.Patients.Application.Accesses.Commands.LoginPatient;
 
 internal sealed class LoginPatientCommandHandler(
     IPasswordHasher passwordHasher,
-    TokenProvider tokenProvider,
+    ITokenProvider tokenProvider,
     IPatientRepository patientRepository) :
     IRequestHandler<LoginPatientCommand, Result<string>>
 {
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
-    private readonly TokenProvider _tokenProvider = tokenProvider;
+    private readonly ITokenProvider _tokenProvider = tokenProvider;
     private readonly IPatientRepository _patientRepository = patientRepository;
 
     public async Task<Result<string>> Handle(

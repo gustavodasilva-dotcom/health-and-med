@@ -39,7 +39,7 @@ public class GetShiftsQueryHandlerTests
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.Get(It.IsAny<Expression<Func<DoctorShift, bool>>>()))
-            .Returns((IQueryable<DoctorShift>)shifts);
+            .Returns(shifts);
 
         var result = await _handler.Handle(
             new GetShiftsQuery(fromDate, toDate),
@@ -59,7 +59,7 @@ public class GetShiftsQueryHandlerTests
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.Get(It.IsAny<Expression<Func<DoctorShift, bool>>>()))
-            .Returns((IQueryable<DoctorShift>)shifts);
+            .Returns(shifts);
 
         var result = await _handler.Handle(
             new GetShiftsQuery(fromDate, toDate),

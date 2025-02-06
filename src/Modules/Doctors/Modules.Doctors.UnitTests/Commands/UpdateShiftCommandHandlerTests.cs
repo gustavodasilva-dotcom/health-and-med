@@ -38,7 +38,7 @@ public class UpdateShiftCommandHandlerTests
         Assert.IsType<Error>(result.Error);
         var error = result.Error;
         Assert.Equal(ErrorConstants.InvalidOperationTitle, error?.Title);
-        Assert.Equal("Busy date for scheduling.", error?.Message);
+        Assert.Equal(ErrorConstants.ShiftUnavailableMessage, error?.Message);
     }
 
     [Fact]

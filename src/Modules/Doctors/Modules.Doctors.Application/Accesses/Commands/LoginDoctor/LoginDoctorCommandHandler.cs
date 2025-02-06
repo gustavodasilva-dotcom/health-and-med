@@ -9,12 +9,12 @@ namespace Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
 
 internal sealed class LoginDoctorCommandHandler(
     IPasswordHasher passwordHasher,
-    TokenProvider tokenProvider,
+    ITokenProvider tokenProvider,
     IDoctorRepository doctorRepository) :
     IRequestHandler<LoginDoctorCommand, Result<string>>
 {
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
-    private readonly TokenProvider _tokenProvider = tokenProvider;
+    private readonly ITokenProvider _tokenProvider = tokenProvider;
     private readonly IDoctorRepository _doctorRepository = doctorRepository;
 
     public async Task<Result<string>> Handle(

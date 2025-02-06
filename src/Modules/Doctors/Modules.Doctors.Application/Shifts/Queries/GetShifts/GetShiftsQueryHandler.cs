@@ -9,7 +9,7 @@ internal sealed class GetShiftsQueryHandler(IDoctorShiftRepository doctorShiftRe
 {
     private readonly IDoctorShiftRepository _doctorShiftRepository = doctorShiftRepository;
 
-    public async Task<IEnumerable<DoctorShift>> Handle(
+    public Task<IEnumerable<DoctorShift>> Handle(
         GetShiftsQuery request,
         CancellationToken cancellationToken)
     {
@@ -17,6 +17,6 @@ internal sealed class GetShiftsQueryHandler(IDoctorShiftRepository doctorShiftRe
             sft.StartAt >= request.FromDate &&
             sft.StartAt <= request.ToDate);
 
-        return await Task.FromResult(shifts);
+        return Task.FromResult(shifts);
     }
 }

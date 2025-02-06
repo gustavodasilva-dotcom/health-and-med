@@ -18,7 +18,7 @@ public static class DependencyInjectionExtensions
         services.AddProblemDetails();
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<TokenProvider>();
+        services.AddSingleton<ITokenProvider,TokenProvider>();
 
         services
             .AddMessaging()

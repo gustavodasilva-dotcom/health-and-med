@@ -5,9 +5,9 @@ namespace Common.Shared.Repositories;
 
 public interface IRepository<TEntity> where TEntity : BaseEntity
 {
-    IQueryable<TEntity> GetAll(int position = 1, int size = 10);
+    IEnumerable<TEntity> GetAll(int position = 1, int size = 10);
 
-    IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter);
+    IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter);
 
     TEntity? GetById(Guid id);
 
