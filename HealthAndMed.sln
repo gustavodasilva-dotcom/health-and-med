@@ -47,14 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Doctors.Integration
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Patients.IntegrationEvents", "src\Modules\Patients\Modules.Patients.IntegrationEvents\Modules.Patients.IntegrationEvents.csproj", "{E9F4A776-608C-4D15-9BCB-B5336CA94633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Doctors.UnitTests", "src\Modules\Doctors\Modules.Doctors.UnitTests\Modules.Doctors.UnitTests.csproj", "{6B0F2FB5-04E7-4BAD-9160-0AB1A3B769C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Doctors.UnitTests", "src\Modules\Doctors\Modules.Doctors.UnitTests\Modules.Doctors.UnitTests.csproj", "{6B0F2FB5-04E7-4BAD-9160-0AB1A3B769C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Patients.UnitTests", "src\Modules\Patients\Modules.Patients.UnitTests\Modules.Patients.UnitTests.csproj", "{F89B67D9-4ABD-4AAC-BAA6-236533F997BC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8s", "K8s", "{B895BA73-FAA9-4552-BA4A-BAD67FE56204}"
-	ProjectSection(SolutionItems) = preProject
-		service-sql.yaml = service-sql.yaml
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Patients.UnitTests", "src\Modules\Patients\Modules.Patients.UnitTests\Modules.Patients.UnitTests.csproj", "{F89B67D9-4ABD-4AAC-BAA6-236533F997BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
