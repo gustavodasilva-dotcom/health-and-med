@@ -12,19 +12,19 @@ internal sealed class DoctorConfigurations : BaseEntityTypeConfiguration<Doctor>
         base.Configure(builder);
 
         builder
-            .Property(x => x.Name)
+            .Property(p => p.Name)
             .HasMaxLength(DatabaseConstants.MaxLength70);
 
         builder
-            .Property(x => x.Ssn)
+            .Property(p => p.Ssn)
             .HasMaxLength(DatabaseConstants.MaxLength11);
 
         builder
-            .Property(x => x.Email)
+            .Property(p => p.Email)
             .HasMaxLength(DatabaseConstants.MaxLength320);
 
         builder
-            .Property(x => x.Password)
+            .Property(p => p.Password)
             .HasMaxLength(DatabaseConstants.MaxLength97);
 
         builder

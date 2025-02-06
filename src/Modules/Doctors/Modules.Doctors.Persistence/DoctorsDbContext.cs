@@ -15,7 +15,7 @@ internal sealed class DoctorsDbContext(
 
     public DbSet<DoctorRegistration> DoctorsRegistrations { get; set; }
     
-    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<DoctorShift> DoctorsShifts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

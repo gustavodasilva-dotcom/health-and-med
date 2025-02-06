@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Common.Shared.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,9 @@ public class Repository<TDbContext, TEntity>(TDbContext dbContext) : IRepository
         => DbContext.Set<TEntity>().AsNoTracking()
             .Skip((position - 1) * size)
             .Take(size);
+
+    public virtual IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
+        => DbContext.Set<TEntity>().Where(filter);
 
     public virtual TEntity? GetById(Guid id)
         => DbContext.Set<TEntity>().SingleOrDefault(x => x.Id == id);
