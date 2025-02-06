@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthandmed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: healthandmed
+  template:
+    metadata:
+      labels:
+        app: healthandmed
+    spec:
+      containers:
+      - name: healthandmed
+        image: localhost:5000/healthandmed:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "production"
+        volumeMounts:
+        - name: appsettings
+          mountPath: /app/appsettings.json
+          subPath: appsettings.json
+      volumes:
+      - name: appsettings
+        configMap:
+          name: appsettings-config
