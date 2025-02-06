@@ -1,22 +1,22 @@
 ﻿using Common.Shared.Abstractions;
 
-namespace Modules.Doctors.Domain.Entities
+namespace Modules.Doctors.Domain.Entities;
+
+public sealed class Appointment : BaseEntity
 {
-    public class Appointment(Guid idDoctor, Guid idPatient, DateTime dateFrom, DateTime dateUntil) 
-        : BaseEntity
+    public required Guid IdDoctor { get; set; }
+    public required Guid IdPatient { get; set; }
+    public required DateTime DateFrom { get; set; }
+    public required DateTime DateUntil { get; set; }
+
+    public override IEnumerable<object> GetAtomicValues()
+        => [IdDoctor, IdPatient, DateFrom, DateUntil];
+
+    public void Update(Guid idPatient, DateTime dateFrom, DateTime dateUntil)
     {
-        public Guid IdDoctor { get; set; } = idDoctor;
-        public Guid IdPatient { get; set; } = idPatient;
-        public DateTime DateFrom { get; set; } = dateFrom;
-        public DateTime DateUntil { get; set; } = dateUntil;
-
-        public override IEnumerable<object> GetAtomicValues() => default;
-
-        public void Update(Guid idPatient, DateTime dateFrom, DateTime dateUntil)
-        {
-            IdPatient = idPatient;
-            DateFrom = dateFrom;
-            DateUntil = dateUntil;
-        }
+        IdPatient = idPatient;
+        DateFrom = dateFrom;
+        DateUntil = dateUntil;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

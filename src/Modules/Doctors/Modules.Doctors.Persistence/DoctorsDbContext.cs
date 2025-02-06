@@ -12,9 +12,10 @@ internal sealed class DoctorsDbContext(
 ) : BaseDbContext<DoctorsDbContext>(publisher, options)
 {
     public DbSet<Doctor> Doctors { get; set; }
-    public DbSet<Appointment> Appointments { get; set; }
 
     public DbSet<DoctorRegistration> DoctorsRegistrations { get; set; }
+    
+    public DbSet<Appointment> Appointments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

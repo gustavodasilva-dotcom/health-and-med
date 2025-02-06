@@ -5,7 +5,7 @@ namespace Modules.Doctors.Domain.Entities;
 
 public sealed class DoctorRegistration : BaseEntity
 {
-    private readonly Doctor? _doctor;
+    private readonly Doctor? _doctor = null;
 
     public Guid DoctorId { get; private set; }
 

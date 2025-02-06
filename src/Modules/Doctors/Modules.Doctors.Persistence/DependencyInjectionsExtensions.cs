@@ -24,7 +24,6 @@ public static class DependencyInjectionsExtensions
             .AddScoped<IDoctorsUnitOfWork, DoctorsUnitOfWork>()
             .AddScoped<IDoctorRepository, DoctorRepository>()
             .AddScoped<IDoctorRegistrationRepository, DoctorRegistrationRepository>()
-            .AddScoped<IAppoinmentUnitOfWork, AppoinmentUnitOfWork>()
             .AddScoped<IAppointmentRepository, AppointmentRepository>();
 
     public static void UsePersistence(this IApplicationBuilder app)

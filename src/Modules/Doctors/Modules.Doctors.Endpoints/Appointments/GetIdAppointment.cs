@@ -1,4 +1,4 @@
-using Carter;
+﻿using Carter;
 using Common.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,24 +6,23 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Modules.Doctors.Application.Appointments.Queries.GetAppointments;
+using Modules.Doctors.Application.Appointments.Queries.GetAppointmentById;
 using Modules.Doctors.Endpoints.Routes;
 
 namespace Modules.Doctors.Endpoints.Appointments;
 
-public sealed class GetAppointments : ICarterModule
+public sealed class GetIDAppointment : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet(AppointmentsRoutes.GetAppointments, async (
+        app.MapGet(AppointmentsRoutes.GetIdAppointment, async (
             ISender sender,
-            [FromRoute] DateTime from,
-            [FromRoute] DateTime to) =>
+            [FromRoute] Guid id) =>
         {
-            var result = await sender.Send(new GetAppointmentsQuery(from, to));
-            if (!result.Any())
+            var result = await sender.Send(new GetAppointmentByIdQuery(id));
+            if (result is null)
             {
-                return Results.NoContent();
+                return Results.NotFound();
             }
             else
             {
