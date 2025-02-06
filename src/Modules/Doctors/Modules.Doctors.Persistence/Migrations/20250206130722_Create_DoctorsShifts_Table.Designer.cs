@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Modules.Doctors.Persistence;
 
@@ -11,9 +12,11 @@ using Modules.Doctors.Persistence;
 namespace Modules.Doctors.Persistence.Migrations
 {
     [DbContext(typeof(DoctorsDbContext))]
-    partial class DoctorsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250206130722_Create_DoctorsShifts_Table")]
+    partial class Create_DoctorsShifts_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

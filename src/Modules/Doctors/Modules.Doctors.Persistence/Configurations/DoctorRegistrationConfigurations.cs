@@ -12,6 +12,11 @@ internal sealed class DoctorRegistrationConfigurations
         base.Configure(builder);
 
         builder
+            .HasMany(registration => registration.Schedules)
+            .WithOne(schedule => schedule.Registration)
+            .HasForeignKey(schedule => schedule.DoctorRegistrationId);
+
+        builder
             .HasIndex(p => new
             {
                 p.State,

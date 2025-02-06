@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Common.Shared.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,13 @@ public class Repository<TDbContext, TEntity>(TDbContext dbContext) : IRepository
 {
     protected readonly TDbContext DbContext = dbContext;
 
-    public virtual IQueryable<TEntity> GetAll(int position = 1, int size = 10)
+    public virtual IEnumerable<TEntity> GetAll(int position = 1, int size = 10)
         => DbContext.Set<TEntity>().AsNoTracking()
             .Skip((position - 1) * size)
             .Take(size);
+
+    public virtual IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
+        => DbContext.Set<TEntity>().Where(filter);
 
     public virtual TEntity? GetById(Guid id)
         => DbContext.Set<TEntity>().SingleOrDefault(x => x.Id == id);

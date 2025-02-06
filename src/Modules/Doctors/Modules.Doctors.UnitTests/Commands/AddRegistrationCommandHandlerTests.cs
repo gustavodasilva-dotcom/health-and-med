@@ -7,73 +7,96 @@ using Modules.Doctors.Domain.Entities;
 using Modules.Doctors.Domain.Enums;
 using Moq;
 
-namespace Modules.Doctors.UnitTests.Commands
+namespace Modules.Doctors.UnitTests.Commands;
+
+public class AddRegistrationCommandHandlerTests
 {
-    public class AddRegistrationCommandHandlerTests
+    private readonly Mock<IDoctorRepository> _mockDoctorRepository;
+    private readonly Mock<IDoctorRegistrationRepository> _mockDoctorRegistrationRepository;
+    private readonly Mock<IDoctorsUnitOfWork> _mockUnitOfWork;
+    private readonly AddRegistrationCommandHandler _handler;
+
+    public AddRegistrationCommandHandlerTests()
     {
-        private readonly Mock<IDoctorRepository> _mockDoctorRepository;
-        private readonly Mock<IDoctorRegistrationRepository> _mockDoctorRegistrationRepository;
-        private readonly Mock<IDoctorsUnitOfWork> _mockUnitOfWork;
-        private readonly AddRegistrationCommandHandler _handler;
+        _mockDoctorRepository = new Mock<IDoctorRepository>();
+        _mockDoctorRegistrationRepository = new Mock<IDoctorRegistrationRepository>();
+        _mockUnitOfWork = new Mock<IDoctorsUnitOfWork>();
 
-        public AddRegistrationCommandHandlerTests()
+        _handler = new AddRegistrationCommandHandler(
+            _mockDoctorRepository.Object,
+            _mockDoctorRegistrationRepository.Object,
+            _mockUnitOfWork.Object);
+    }
+
+    [Fact]
+    public async Task Handle_ShouldReturnError_WhenDoctorNotFound()
+    {
+        var command = new AddRegistrationCommand(Guid.NewGuid(), 2222, UFs.SaoPaulo);
+
+        _mockDoctorRepository
+            .Setup(repo => repo.GetById(command.DoctorId))
+            .Returns((Doctor?)null);
+
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        result.Error.Should().BeOfType<Error>();
+        var error = result.Error;
+        error.Message.Should().Be("No doctor was found with the given id.");
+        error.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
+
+    [Fact]
+    public async Task Handle_ShouldReturnError_WhenRegistrationNumberAlreadyRegisteredInState()
+    {
+        var command = new AddRegistrationCommand(Guid.NewGuid(), 2222, UFs.SaoPaulo);
+        var doctor = new Doctor
         {
-            _mockDoctorRepository = new Mock<IDoctorRepository>();
-            _mockDoctorRegistrationRepository = new Mock<IDoctorRegistrationRepository>();
-            _mockUnitOfWork = new Mock<IDoctorsUnitOfWork>();
+            Ssn = "12345",
+            Name = "Doctor",
+            Password = "password",
+            Email = "doctor@exemple.com"
+        };
 
-            _handler = new AddRegistrationCommandHandler(
-                _mockDoctorRepository.Object,
-                _mockDoctorRegistrationRepository.Object,
-                _mockUnitOfWork.Object);
-        }
+        _mockDoctorRepository
+            .Setup(repo => repo.GetById(command.DoctorId))
+            .Returns(doctor);
 
-        [Fact]
-        public async Task Handle_ShouldReturnError_WhenDoctorNotFound()
+        _mockDoctorRepository
+            .Setup(repo => repo.IsRegisteredInState(command.RegistrationNumber, command.RegistrationState))
+            .Returns(true);
+
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        result.Error.Should().BeOfType<Error>();
+        var error = result.Error;
+        error.Message.Should().Be("The doctor's registration number is already in use in the informed state.");
+    }
+
+    [Fact]
+    public async Task Handle_ShouldReturnSuccess_WhenRegistrationIsAddedSuccessfully()
+    {
+        var command = new AddRegistrationCommand(Guid.NewGuid(), 2222, UFs.SaoPaulo);
+        var doctor = new Doctor
         {
-            var command = new AddRegistrationCommand(Guid.NewGuid(), 2222, UFs.SaoPaulo);
+            Ssn = "12345",
+            Name = "Doctor",
+            Password = "password",
+            Email = "doctor@exemple.com"
+        };
 
-            _mockDoctorRepository.Setup(repo => repo.GetById(command.DoctorId)).Returns((Doctor)null);
+        _mockDoctorRepository
+            .Setup(repo => repo.GetById(command.DoctorId))
+            .Returns(doctor);
 
-            var result = await _handler.Handle(command, CancellationToken.None);
+        _mockDoctorRepository
+            .Setup(repo => repo.IsRegisteredInState(command.RegistrationNumber, command.RegistrationState))
+            .Returns(false);
 
-            result.Error.Should().BeOfType<Error>();
-            var error = result.Error;
-            error.Message.Should().Be("No doctor was found with the given id.");
-            error.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        }
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-        [Fact]
-        public async Task Handle_ShouldReturnError_WhenRegistrationNumberAlreadyRegisteredInState()
-        {
-            var command = new AddRegistrationCommand(Guid.NewGuid(), 2222, UFs.SaoPaulo);
-            var doctor = new Doctor { Ssn = "12345", Name = "Doctor", Password = "password", Email = "doctor@exemple.com" };
-
-            _mockDoctorRepository.Setup(repo => repo.GetById(command.DoctorId)).Returns(doctor);
-            _mockDoctorRepository.Setup(repo => repo.IsRegisteredInState(command.RegistrationNumber, command.RegistrationState)).Returns(true);
-
-            var result = await _handler.Handle(command, CancellationToken.None);
-
-            result.Error.Should().BeOfType<Error>();
-            var error = result.Error;
-            error.Message.Should().Be("The doctor's registration number is already in use in the informed state.");
-        }
-
-        [Fact]
-        public async Task Handle_ShouldReturnSuccess_WhenRegistrationIsAddedSuccessfully()
-        {
-            var command = new AddRegistrationCommand(Guid.NewGuid(), 2222, UFs.SaoPaulo);
-            var doctor = new Doctor { Ssn = "12345", Name = "Doctor", Password = "password", Email = "doctor@exemple.com" };
-
-            _mockDoctorRepository.Setup(repo => repo.GetById(command.DoctorId)).Returns(doctor);
-            _mockDoctorRepository.Setup(repo => repo.IsRegisteredInState(command.RegistrationNumber, command.RegistrationState)).Returns(false);
-
-            var result = await _handler.Handle(command, CancellationToken.None);
-
-            result.Should().BeOfType<Result>();
-            result.IsSuccess.Should().BeTrue();
-            _mockDoctorRegistrationRepository.Verify(repo => repo.Update(It.IsAny<DoctorRegistration>()), Times.Once);
-            _mockUnitOfWork.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Once);
-        }
+        result.Should().BeOfType<Result>();
+        result.IsSuccess.Should().BeTrue();
+        _mockDoctorRegistrationRepository.Verify(repo => repo.Update(It.IsAny<DoctorRegistration>()), Times.Once);
+        _mockUnitOfWork.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Once);
     }
 }
