@@ -11,9 +11,17 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Common.Shared\Common.Shared.csproj" />
+    <ProjectReference Include="..\Modules.Patients.Application\Modules.Patients.Application.csproj" />
+    <ProjectReference Include="..\Modules.Patients.Domain\Modules.Patients.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
