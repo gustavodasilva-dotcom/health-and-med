@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -13,37 +13,17 @@
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Moq" />
     <PackageReference Include="NetArchTest.Rules" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\App\App.csproj" />
-    <ProjectReference Include="..\..\src\Common\Common.DependencyInjection\Common.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\src\Common\Common.Shared\Common.Shared.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.Application\Modules.Doctors.Application.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.CrossCutting.DependencyInjection\Modules.Doctors.CrossCutting.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.Domain\Modules.Doctors.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.Endpoints\Modules.Doctors.Endpoints.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.IntegrationEvents\Modules.Doctors.IntegrationEvents.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.Application\Modules.Patients.Application.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.CrossCutting.DependencyInjection\Modules.Patients.CrossCutting.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.Domain\Modules.Patients.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.Persistence\Modules.Doctors.Persistence.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.Endpoints\Modules.Patients.Endpoints.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.IntegrationEvents\Modules.Patients.IntegrationEvents.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.Persistence\Modules.Patients.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\Patients\Commands\" />
-    <Folder Include="Modules\Patients\Queries\" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>

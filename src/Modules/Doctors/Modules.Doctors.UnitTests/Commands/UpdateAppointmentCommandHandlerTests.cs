@@ -2,95 +2,98 @@
 using Modules.Doctors.Domain.Entities;
 using Common.Shared;
 using Moq;
-using Modules.Doctors.Application.Appointments.Commands.UpdateAppointment;
 using Modules.Doctors.Application.Constants;
-using FluentAssertions;
+using Modules.Doctors.Application.Appointments.Commands.UpdateAppointment;
 
-namespace Modules.Doctors.UnitTests.Commands;
-
-public class UpdateAppointmentCommandHandlerTests
+namespace ArchitectureTests.Modules.Doctors.Commands
 {
-    private readonly Mock<IAppointmentRepository> _mockAppointmentRepository;
-    private readonly Mock<IDoctorsUnitOfWork> _mockDoctorsUnitOfWork;
-    private readonly UpdateAppointmentCommandHandler _handler;
-
-    public UpdateAppointmentCommandHandlerTests()
+    public class AppointmentUpdateCommandHandlerTests
     {
-        _mockAppointmentRepository = new Mock<IAppointmentRepository>();
-        _mockDoctorsUnitOfWork = new Mock<IDoctorsUnitOfWork>();
-        _handler = new UpdateAppointmentCommandHandler(_mockAppointmentRepository.Object, _mockDoctorsUnitOfWork.Object);
-    }
+        private readonly Mock<IAppointmentRepository> _mockAppointmentRepository;
+        private readonly Mock<IDoctorsUnitOfWork> _mockDoctorsUnitOfWork;
+        private readonly UpdateAppointmentCommandHandler _handler;
 
-    [Fact]
-    public async Task Handle_WhenDateIsNotFree_ReturnsError()
-    {
-        var request = new UpdateAppointmentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddHours(1));
+        public AppointmentUpdateCommandHandlerTests()
+        {
+            _mockAppointmentRepository = new Mock<IAppointmentRepository>();
+            _mockDoctorsUnitOfWork = new Mock<IDoctorsUnitOfWork>();
+            _handler = new UpdateAppointmentCommandHandler(_mockAppointmentRepository.Object, _mockDoctorsUnitOfWork.Object);
+        }
 
-        _mockAppointmentRepository
-            .Setup(repo => repo.ExistsDateFree(request.IdDoctor, request.DateFrom, request.DateUntil))
-            .Returns(false);
+        [Fact]
+        public async Task Handle_WhenDateIsNotFree_ReturnsError()
+        {
+            var request = new UpdateAppointmentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddHours(1));
 
-        var result = await _handler.Handle(request, CancellationToken.None);
+            _mockAppointmentRepository
+                .Setup(repo => repo.ExistsDateFree(request.IdDoctor, request.DateFrom, request.DateUntil))
+                .Returns(false);
 
-        Assert.IsType<Error>(result.Error);
-        var error = result.Error;
-        Assert.Equal(ErrorConstants.InvalidOperationTitle, error?.Title);
-        Assert.Equal("Busy date for scheduling.", error?.Message);
-    }
+            var result = await _handler.Handle(request, CancellationToken.None);
 
-    [Fact]
-    public async Task Handle_WhenAppointmentNotFound_ReturnsError()
-    {
-        var request = new UpdateAppointmentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow.AddHours(2), DateTime.UtcNow.AddHours(3));
+            Assert.IsType<Error>(result.Error);
+            var error = result.Error;
+            Assert.Equal(ErrorConstants.InvalidOperationTitle, error?.Title);
+            Assert.Equal("Busy date for scheduling.", error?.Message);
+        }
 
-        _mockAppointmentRepository
+        [Fact]
+        public async Task Handle_WhenAppointmentNotFound_ReturnsError()
+        {
+            var request = new UpdateAppointmentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow.AddHours(2), DateTime.UtcNow.AddHours(3));
+
+            _mockAppointmentRepository
+                    .Setup(repo => repo.ExistsDateFree(request.IdDoctor, request.DateFrom, request.DateUntil))
+                    .Returns(true);
+
+            _mockAppointmentRepository
+                .Setup(repo => repo.GetById(request.Id))
+                    .Returns((Appointment)null);
+
+            var result = await _handler.Handle(request, CancellationToken.None);
+
+            Assert.IsType<Error>(result.Error);
+            var error = result.Error;
+            Assert.Equal(ErrorConstants.NotFoundTitle, error?.Title);
+            Assert.Equal("Appointment not found.", error?.Message);
+        }
+
+        [Fact]
+        public async Task Handle_WhenAppointmentUpdatedSuccessfully_ReturnsUpdatedAppointment()
+        {
+
+            var request = new UpdateAppointmentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddHours(1));
+
+            var existingAppointment = new Appointment
+            {
+                IdDoctor = Guid.NewGuid(),
+                IdPatient = Guid.NewGuid(),
+                DateFrom = DateTime.Now,
+                DateUntil = DateTime.Now.AddHours(1)
+            };
+
+            _mockAppointmentRepository
                 .Setup(repo => repo.ExistsDateFree(request.IdDoctor, request.DateFrom, request.DateUntil))
                 .Returns(true);
 
-        _mockAppointmentRepository
-            .Setup(repo => repo.GetById(request.Id))
-                .Returns((Appointment?)null);
+            _mockAppointmentRepository
+                .Setup(repo => repo.GetById(request.Id))
+                .Returns(existingAppointment);
 
-        var result = await _handler.Handle(request, CancellationToken.None);
+            _mockAppointmentRepository
+                .Setup(repo => repo.Update(It.IsAny<Appointment>()))
+                .Verifiable();
 
-        Assert.IsType<Error>(result.Error);
-        var error = result.Error;
-        Assert.Equal(ErrorConstants.NotFoundTitle, error?.Title);
-        Assert.Equal("Appointment not found.", error?.Message);
-    }
+            _mockDoctorsUnitOfWork
+                .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
 
-    [Fact]
-    public async Task Handle_WhenAppointmentUpdatedSuccessfully_ReturnsUpdatedAppointment()
-    {
-        var request = new UpdateAppointmentCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddHours(1));
+            var result = await _handler.Handle(request, CancellationToken.None);
 
-        var existingAppointment = new Appointment
-        {
-            IdDoctor = request.IdDoctor,
-            IdPatient = request.IdPatient,
-            DateFrom = DateTime.Now,
-            DateUntil = DateTime.Now.AddHours(1)
-        };
+            Assert.IsType<Result>(result);
+            Assert.True(result.IsSuccess);
 
-        _mockAppointmentRepository
-            .Setup(repo => repo.ExistsDateFree(request.IdDoctor, request.DateFrom, request.DateUntil))
-            .Returns(true);
-
-        _mockAppointmentRepository
-            .Setup(repo => repo.GetById(request.Id))
-            .Returns(existingAppointment);
-
-        _mockAppointmentRepository
-            .Setup(repo => repo.Update(It.IsAny<Appointment>()))
-            .Verifiable();
-
-        _mockDoctorsUnitOfWork
-            .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
-        var result = await _handler.Handle(request, CancellationToken.None);
-        result.IsSuccess.Should().BeTrue();
-
-        _mockDoctorsUnitOfWork.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            _mockDoctorsUnitOfWork.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
     }
 }

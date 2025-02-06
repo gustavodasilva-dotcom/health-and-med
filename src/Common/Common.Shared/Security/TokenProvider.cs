@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Common.Shared.Security;
 
-public sealed class TokenProvider(IConfiguration configuration)
+public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
     public string Create<T>(T user, string role) where T : UserEntity
     {

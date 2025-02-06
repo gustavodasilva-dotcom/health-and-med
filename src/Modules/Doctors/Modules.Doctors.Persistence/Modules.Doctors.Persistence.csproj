@@ -20,8 +20,4 @@
 		<ProjectReference Include="..\..\..\Common\Common.Shared\Common.Shared.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo Include="ArchitectureTests" />
-	</ItemGroup>
-
 </Project>

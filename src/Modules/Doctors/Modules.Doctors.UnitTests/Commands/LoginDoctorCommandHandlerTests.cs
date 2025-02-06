@@ -2,6 +2,7 @@
 using Common.Shared.Security;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
@@ -12,14 +13,14 @@ namespace ArchitectureTests.Modules.Doctors.Commands
     public class LoginDoctorCommandHandlerTests
     {
         private readonly Mock<IPasswordHasher> _mockPasswordHasher;
-        private readonly Mock<TokenProvider> _mockTokenProvider;
+        private readonly Mock<ITokenProvider> _mockTokenProvider;
         private readonly Mock<IDoctorRepository> _mockDoctorRepository;
         private readonly LoginDoctorCommandHandler _handler;
 
         public LoginDoctorCommandHandlerTests()
         {
             _mockPasswordHasher = new Mock<IPasswordHasher>();
-            _mockTokenProvider = new Mock<TokenProvider>();
+            _mockTokenProvider = new Mock<ITokenProvider>();
             _mockDoctorRepository = new Mock<IDoctorRepository>();
 
             _handler = new LoginDoctorCommandHandler(
@@ -62,7 +63,7 @@ namespace ArchitectureTests.Modules.Doctors.Commands
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
-            result.Should().BeOfType<Error>();
+            result.Error.Should().BeOfType<Error>();
             var error = result.Error;
             error?.Message.Should().Be("The given password is incorrect.");
         }
@@ -82,11 +83,13 @@ namespace ArchitectureTests.Modules.Doctors.Commands
 
             _mockDoctorRepository.Setup(repo => repo.GetWithEmail(It.IsAny<string>())).Returns(doctor);
             _mockPasswordHasher.Setup(ph => ph.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
-            _mockTokenProvider.Setup(tp => tp.Create(It.IsAny<Doctor>(), It.IsAny<string>())).Returns("mock-token");
+            _mockTokenProvider.Setup(t => t.Create<Doctor>(It.IsAny<Doctor>(), It.IsAny<string>())).Returns("mock-token");
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
-            result.Should().Be("mock-token");
+            Assert.True(result.IsSuccess);
+
+            result.Value.Should().Be("mock-token");
         }
     }
 }
