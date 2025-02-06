@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="Modules.Doctors.UnitTests" />
+		<InternalsVisibleTo Include="ArchitectureTests" />
 	</ItemGroup>
 
 </Project>
