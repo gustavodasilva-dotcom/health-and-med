@@ -27,7 +27,7 @@ public sealed class DoctorRegistration : BaseEntity
         }
     }
 
-    public IReadOnlySet<DoctorShift> Schedules
+    public IReadOnlySet<DoctorShift> Shifts
         => _shifts;
 
     public void Update(UFs state, int number)

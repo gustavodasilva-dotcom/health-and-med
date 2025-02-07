@@ -12,7 +12,7 @@ using Modules.Doctors.Persistence;
 namespace Modules.Doctors.Persistence.Migrations
 {
     [DbContext(typeof(DoctorsDbContext))]
-    [Migration("20250206130722_Create_DoctorsShifts_Table")]
+    [Migration("20250206232906_Create_DoctorsShifts_Table")]
     partial class Create_DoctorsShifts_Table
     {
         /// <inheritdoc />
@@ -169,7 +169,7 @@ namespace Modules.Doctors.Persistence.Migrations
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
                 {
                     b.HasOne("Modules.Doctors.Domain.Entities.DoctorRegistration", "Registration")
-                        .WithMany("Schedules")
+                        .WithMany("Shifts")
                         .HasForeignKey("DoctorRegistrationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -184,7 +184,7 @@ namespace Modules.Doctors.Persistence.Migrations
 
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorRegistration", b =>
                 {
-                    b.Navigation("Schedules");
+                    b.Navigation("Shifts");
                 });
 #pragma warning restore 612, 618
         }

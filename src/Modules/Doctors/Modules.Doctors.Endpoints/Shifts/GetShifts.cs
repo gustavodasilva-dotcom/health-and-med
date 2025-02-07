@@ -1,3 +1,4 @@
+using AutoMapper;
 using Carter;
 using Common.Shared.Constants;
 using MediatR;
@@ -17,6 +18,7 @@ public sealed class GetShifts : ICarterModule
     {
         app.MapGet(ShiftsRoutes.GetShifts, async (
             ISender sender,
+            IMapper mapper,
             [FromRoute] DateTime from,
             [FromRoute] DateTime to) =>
         {
@@ -27,7 +29,8 @@ public sealed class GetShifts : ICarterModule
             }
             else
             {
-                return Results.Ok(result);
+                var response = mapper.Map<IEnumerable<GetShiftsResponse>>(result);                
+                return Results.Ok(response);
             }
         })
         .WithTags(ShiftsRoutes.Tags)
