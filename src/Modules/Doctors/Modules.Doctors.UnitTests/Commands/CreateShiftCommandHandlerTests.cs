@@ -31,12 +31,14 @@ public class CreateShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenDateIsNotFree_ReturnsError()
     {
+        // Arrange
         var doctor = new Doctor
         {
             Name = "doctor",
             Ssn = "123456",
             Email = "doctor@example.com",
-            Password = "hashedPassword"
+            Password = "hashedPassword",
+            Specialty = MedicalSpecialties.GeneralPhysician
         };
         doctor.AddRegistration(123456, UFs.SaoPaulo);
 
@@ -54,8 +56,10 @@ public class CreateShiftCommandHandlerTests
             .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
             .Returns(false);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
+        // Assert
         Assert.IsType<Error>(result.Error);
         var error = result.Error;
         Assert.Equal(ErrorConstants.InvalidOperationTitle, error?.Title);
@@ -65,12 +69,14 @@ public class CreateShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenDateIsFree_CreatesShiftAndSavesIt()
     {
+        // Arrange
         var doctor = new Doctor
         {
             Name = "doctor",
             Ssn = "123456",
             Email = "doctor@example.com",
-            Password = "hashedPassword"
+            Password = "hashedPassword",
+            Specialty = MedicalSpecialties.GeneralPhysician
         };
         doctor.AddRegistration(123456, UFs.SaoPaulo);
 
@@ -102,9 +108,11 @@ public class CreateShiftCommandHandlerTests
             .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
-        result.IsSuccess.Should().BeTrue();
 
+        // Assert
+        result.IsSuccess.Should().BeTrue();
         _mockDoctorShiftRepository.Verify(repo => repo.Add(It.IsAny<DoctorShift>()), Times.Once);
         _mockUnitOfWork.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }

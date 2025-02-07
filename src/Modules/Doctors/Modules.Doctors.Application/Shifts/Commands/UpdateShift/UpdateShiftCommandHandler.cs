@@ -3,18 +3,19 @@ using Common.Shared.Constants;
 using MediatR;
 using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
+using Modules.Doctors.Domain.Entities;
 
 namespace Modules.Doctors.Application.Shifts.Commands.UpdateShift;
 
 internal sealed class UpdateShiftCommandHandler(
     IDoctorShiftRepository doctorShiftRepository,
     IDoctorsUnitOfWork unitOfWork) :
-    IRequestHandler<UpdateShiftCommand, Result>
+    IRequestHandler<UpdateShiftCommand, Result<DoctorShift>>
 {
     private readonly IDoctorShiftRepository _doctorShiftRepository = doctorShiftRepository;
     private readonly IDoctorsUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result> Handle(
+    public async Task<Result<DoctorShift>> Handle(
         UpdateShiftCommand request,
         CancellationToken cancellationToken)
     {
@@ -37,6 +38,6 @@ internal sealed class UpdateShiftCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return shift;
     }
 }

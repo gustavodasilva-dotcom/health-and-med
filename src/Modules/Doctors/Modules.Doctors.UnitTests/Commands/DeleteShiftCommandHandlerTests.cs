@@ -23,14 +23,17 @@ public class DeleteShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenShiftNotFound_ReturnsError()
     {
-        var request = new DeleteShiftCommand(Guid.NewGuid());
+        // Arrange
+        var request = new DeleteShiftCommand(Id: Guid.NewGuid());
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.GetById(request.Id))
             .Returns((DoctorShift?)null);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
+        // Assert
         Assert.IsType<Error>(result.Error);
         var error = result.Error;
         Assert.Equal(ErrorConstants.NotFoundTitle, error?.Title);
@@ -40,7 +43,8 @@ public class DeleteShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenShiftFound_DeletesShiftAndSavesChanges()
     {
-        var request = new DeleteShiftCommand(Guid.NewGuid());
+        // Arrange
+        var request = new DeleteShiftCommand(Id: Guid.NewGuid());
         var existingShift = new DoctorShift
         {
             StartAt = DateTime.Now,
@@ -55,8 +59,10 @@ public class DeleteShiftCommandHandlerTests
             .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
+        // Assert
         Assert.IsType<Result>(result);
         Assert.True(result.IsSuccess);
 

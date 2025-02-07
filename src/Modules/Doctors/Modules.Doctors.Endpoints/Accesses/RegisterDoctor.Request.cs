@@ -11,11 +11,13 @@ internal sealed class RegisterDoctorRequest
 
     [JsonPropertyName("registration_state")]
     public UFs RegistrationState { get; init; }
-    
+
     [JsonPropertyName("registration_number")]
     public int RegistrationNumber { get; init; }
 
+    public required MedicalSpecialties Specialty { get; init; }
+
     public required string Email { get; init; }
-    
+
     public required string Password { get; init; }
 }

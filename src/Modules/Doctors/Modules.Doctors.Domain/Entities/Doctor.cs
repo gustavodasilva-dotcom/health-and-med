@@ -13,17 +13,20 @@ public sealed class Doctor : UserEntity
 
     public required string Password { get; set; }
 
+    public required MedicalSpecialties Specialty { get; set; }
+
     public override IEnumerable<object> GetAtomicValues()
         => [Ssn];
 
     public IReadOnlySet<DoctorRegistration> Registrations
         => _registrations;
 
-    public void Update(string name, string ssn, string email)
+    public void Update(string name, string ssn, string email, MedicalSpecialties specialty)
     {
         Name = name.Trim();
         Ssn = ssn.Trim();
         Email = email.Trim();
+        Specialty = specialty;
         UpdatedAt = DateTime.UtcNow;
     }
 

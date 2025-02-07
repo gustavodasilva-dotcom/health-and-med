@@ -24,17 +24,21 @@ public class UpdateShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenDateIsNotFree_ReturnsError()
     {
+        // Arrange
         var request = new UpdateShiftCommand(
             Id: Guid.NewGuid(),
             StartAt: DateTime.UtcNow,
-            EndAt: DateTime.UtcNow.AddHours(1));
+            EndAt: DateTime.UtcNow.AddHours(1)
+        );
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
             .Returns(false);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
+        // Assert
         Assert.IsType<Error>(result.Error);
         var error = result.Error;
         Assert.Equal(ErrorConstants.InvalidOperationTitle, error?.Title);
@@ -44,10 +48,12 @@ public class UpdateShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenShiftNotFound_ReturnsError()
     {
+        // Arrange
         var request = new UpdateShiftCommand(
             Id: Guid.NewGuid(),
             StartAt: DateTime.UtcNow,
-            EndAt: DateTime.UtcNow.AddHours(1));
+            EndAt: DateTime.UtcNow.AddHours(1)
+        );
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
@@ -57,8 +63,10 @@ public class UpdateShiftCommandHandlerTests
             .Setup(repo => repo.GetById(request.Id))
                 .Returns((DoctorShift?)null);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
+        // Assert
         Assert.IsType<Error>(result.Error);
         var error = result.Error;
         Assert.Equal(ErrorConstants.NotFoundTitle, error?.Title);
@@ -68,6 +76,7 @@ public class UpdateShiftCommandHandlerTests
     [Fact]
     public async Task Handle_WhenShiftUpdatedSuccessfully_ReturnsUpdatedShift()
     {
+        // Arrange
         var existingShift = new DoctorShift
         {
             StartAt = DateTime.Now,
@@ -77,7 +86,8 @@ public class UpdateShiftCommandHandlerTests
         var request = new UpdateShiftCommand(
             Id: existingShift.Id,
             StartAt: DateTime.UtcNow,
-            EndAt: DateTime.UtcNow.AddHours(1));
+            EndAt: DateTime.UtcNow.AddHours(1)
+        );
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
@@ -95,7 +105,10 @@ public class UpdateShiftCommandHandlerTests
             .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
+        // Act
         var result = await _handler.Handle(request, CancellationToken.None);
+
+        // Assert
         result.IsSuccess.Should().BeTrue();
 
         _mockDoctorsUnitOfWork.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

@@ -26,7 +26,7 @@ public sealed class DeleteShift : ICarterModule
             }
             else
             {
-                return Results.Ok(result);
+                return Results.NoContent();
             }
         })
         .WithTags(ShiftsRoutes.Tags)

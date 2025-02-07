@@ -1,87 +1,87 @@
-using System.Runtime.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Modules.Doctors.Domain.Enums;
 
 public enum UFs
 {
-    [EnumMember(Value = "AC")]
+    [Display(ShortName = "AC")]
     Acre = 1,
 
-    [EnumMember(Value = "AL")]
+    [Display(ShortName = "AL")]
     Alagoas = 2,
 
-    [EnumMember(Value = "AP")]
+    [Display(Name = "Amapá", ShortName = "AP")]
     Amapa = 3,
 
-    [EnumMember(Value = "AM")]
+    [Display(ShortName = "AM")]
     Amazonas = 4,
 
-    [EnumMember(Value = "BA")]
+    [Display(ShortName = "BA")]
     Bahia = 5,
 
-    [EnumMember(Value = "CE")]
+    [Display(Name = "Ceará", ShortName = "CE")]
     Ceara = 6,
 
-    [EnumMember(Value = "DF")]
+    [Display(Name = "Distrito Federal", ShortName = "DF")]
     DistritoFederal = 7,
 
-    [EnumMember(Value = "ES")]
+    [Display(Name = "Espírito Santo", ShortName = "ES")]
     EspiritoSanto = 8,
 
-    [EnumMember(Value = "GO")]
+    [Display(Name = "Goiás", ShortName = "GO")]
     Goias = 9,
 
-    [EnumMember(Value = "MA")]
+    [Display(Name = "Maranhão", ShortName = "MA")]
     Maranhao = 10,
 
-    [EnumMember(Value = "MT")]
+    [Display(Name = "Mato Grosso", ShortName = "MT")]
     MatoGrosso = 11,
 
-    [EnumMember(Value = "MS")]
+    [Display(Name = "Mato Grosso do Sul", ShortName = "MS")]
     MatoGrossoDoSul = 12,
 
-    [EnumMember(Value = "MG")]
+    [Display(Name = "Minas Gerais", ShortName = "MG")]
     MinasGerais = 13,
 
-    [EnumMember(Value = "PA")]
+    [Display(Name = "Pará", ShortName = "PA")]
     Para = 14,
 
-    [EnumMember(Value = "PB")]
+    [Display(Name = "Paraíba", ShortName = "PB")]
     Paraiba = 15,
 
-    [EnumMember(Value = "PR")]
+    [Display(Name = "Paraná", ShortName = "PR")]
     Parana = 16,
 
-    [EnumMember(Value = "PE")]
+    [Display(ShortName = "PE")]
     Pernambuco = 17,
 
-    [EnumMember(Value = "PI")]
+    [Display(Name = "Piauí", ShortName = "PI")]
     Piaui = 18,
 
-    [EnumMember(Value = "RJ")]
+    [Display(Name = "Rio de Janeiro", ShortName = "RJ")]
     RioDeJaneiro = 19,
 
-    [EnumMember(Value = "RN")]
+    [Display(Name = "Rio Grande do Norte", ShortName = "RN")]
     RioGrandeDoNorte = 20,
 
-    [EnumMember(Value = "RS")]
+    [Display(Name = "Rio Grande do Sul", ShortName = "RS")]
     RioGrandeDoSul = 21,
 
-    [EnumMember(Value = "RO")]
+    [Display(Name = "Rondônia", ShortName = "RO")]
     Rondonia = 22,
 
-    [EnumMember(Value = "RR")]
+    [Display(ShortName = "RR")]
     Roraima = 23,
 
-    [EnumMember(Value = "SC")]
+    [Display(Name = "Santa Catarina", ShortName = "SC")]
     SantaCatarina = 24,
 
-    [EnumMember(Value = "SP")]
+    [Display(Name = "São Paulo", ShortName = "SP")]
     SaoPaulo = 25,
 
-    [EnumMember(Value = "SE")]
+    [Display(ShortName = "SE")]
     Sergipe = 26,
 
-    [EnumMember(Value = "TO")]
+    [Display(ShortName = "TO")]
     Tocantins = 27
 }
