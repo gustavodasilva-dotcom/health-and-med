@@ -53,7 +53,7 @@ public class LoginPatientCommandHandlerTests
         var command = new LoginPatientCommand("patient@example.com", "wrongpassword");
         var patient = new Patient
         {
-            Cpf = "4545454545",
+            Ssn = "4545454545",
             Name = "John Doe",
             Email = "patient@example.com",
             Password = "hashedPassword"
@@ -80,7 +80,7 @@ public class LoginPatientCommandHandlerTests
         var command = new LoginPatientCommand("patient@example.com", "correctpassword");
         var patient = new Patient
         {
-            Cpf = "4545454545",
+            Ssn = "4545454545",
             Name = "John Doe",
             Email = "patient@example.com",
             Password = "hashedPassword"

@@ -49,7 +49,7 @@ namespace Modules.Patients.UnitTests.Commands
             var command = new RegisterPatientCommand("name", "45454545", "patient@exemple.com", "password");
 
             _mockPatientRepository.Setup(repo => repo.ExistsWithEmail(command.Email)).Returns(false);
-            _mockPatientRepository.Setup(repo => repo.ExistsWithCpf(command.Cpf)).Returns(true);
+            _mockPatientRepository.Setup(repo => repo.ExistsWithCpf(command.Ssn)).Returns(true);
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -65,7 +65,7 @@ namespace Modules.Patients.UnitTests.Commands
             var command = new RegisterPatientCommand("name", "45454545", "patient@exemple.com", "password");
 
             _mockPatientRepository.Setup(repo => repo.ExistsWithEmail(command.Email)).Returns(false);
-            _mockPatientRepository.Setup(repo => repo.ExistsWithCpf(command.Cpf)).Returns(false);
+            _mockPatientRepository.Setup(repo => repo.ExistsWithCpf(command.Ssn)).Returns(false);
             _mockPasswordHasher.Setup(ph => ph.Hash(command.Password.Trim())).Returns("hashedPassword");
 
             var result = await _handler.Handle(command, CancellationToken.None);

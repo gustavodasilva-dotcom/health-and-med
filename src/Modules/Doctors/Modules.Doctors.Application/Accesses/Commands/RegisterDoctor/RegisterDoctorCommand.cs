@@ -7,7 +7,6 @@ namespace Modules.Doctors.Application.Accesses.Commands.RegisterDoctor;
 public sealed record RegisterDoctorCommand(
     string Name,
     string Ssn,
-    UFs RegistrationState,
     int RegistrationNumber,
     MedicalSpecialties Specialty,
     string Email,

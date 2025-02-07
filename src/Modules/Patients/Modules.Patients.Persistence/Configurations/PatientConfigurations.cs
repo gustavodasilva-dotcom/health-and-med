@@ -16,7 +16,7 @@ internal sealed class PatientConfigurations : BaseEntityTypeConfiguration<Patien
             .HasMaxLength(DatabaseConstants.MaxLength70);
 
         builder
-            .Property(x => x.Cpf)
+            .Property(x => x.Ssn)
             .HasMaxLength(DatabaseConstants.MaxLength11);
 
         builder
@@ -28,7 +28,7 @@ internal sealed class PatientConfigurations : BaseEntityTypeConfiguration<Patien
             .HasMaxLength(DatabaseConstants.MaxLength97);
 
         builder
-            .HasIndex(p => p.Cpf)
+            .HasIndex(p => p.Ssn)
             .IsUnique();
 
         builder

@@ -31,15 +31,6 @@ internal sealed class CreateShiftCommandHandler(
                 StatusCodes.Status404NotFound);
         }
 
-        var registration = doctor.Registrations.FirstOrDefault(r => r.Id == request.RegistrationId);
-        if (registration is null)
-        {
-            return new Error(
-                SharedErrorConstants.NotFoundTitle,
-                "No doctor's registration was found with the given id.",
-                StatusCodes.Status404NotFound);
-        }
-
         if (!_doctorShiftRepository.IsShiftAvailable(request.StartAt, request.EndAt))
         {
             return new Error(
@@ -52,7 +43,7 @@ internal sealed class CreateShiftCommandHandler(
             StartAt = request.StartAt,
             EndAt = request.EndAt
         };
-        registration.AddShift(shift);
+        doctor.AddShift(shift);
 
         _doctorShiftRepository.Add(shift);
 

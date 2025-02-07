@@ -29,11 +29,6 @@ namespace Modules.Patients.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -59,6 +54,11 @@ namespace Modules.Patients.Persistence.Migrations
                         .HasMaxLength(97)
                         .HasColumnType("nvarchar(97)");
 
+                    b.Property<string>("Ssn")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -66,10 +66,10 @@ namespace Modules.Patients.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Cpf")
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Email")
+                    b.HasIndex("Ssn")
                         .IsUnique();
 
                     b.ToTable("Patients", "patients");

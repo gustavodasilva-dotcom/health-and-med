@@ -2,6 +2,7 @@
 using Common.Shared.Security;
 using FluentAssertions;
 using Modules.Doctors.Application.Accesses.Commands.RegisterDoctor;
+using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
 using Modules.Doctors.Domain.Enums;
@@ -25,17 +26,17 @@ public class RegisterDoctorCommandHandlerTests
         _handler = new RegisterDoctorCommandHandler(
             _mockPasswordHasher.Object,
             _mockDoctorRepository.Object,
-            _mockUnitOfWork.Object);
+            _mockUnitOfWork.Object
+        );
     }
 
     [Fact]
-    public async Task Handle_ShouldReturnError_WhenEmailAlreadyInUse()
+    public async Task Handle_ShouldReturnError_WhenRegistrationNumberIsAlreadyInUse()
     {
         // Arrange
         var command = new RegisterDoctorCommand(
             Name: "Doctor",
             Ssn: "123456789",
-            RegistrationState: UFs.SaoPaulo,
             RegistrationNumber: 1234,
             Specialty: MedicalSpecialties.GeneralPhysician,
             Email: "doctor@example.com",
@@ -43,7 +44,7 @@ public class RegisterDoctorCommandHandlerTests
         );
 
         _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithEmail(command.Email))
+            .Setup(repo => repo.IsRegistrationNumberInUse(command.RegistrationNumber))
             .Returns(true);
 
         // Act
@@ -52,73 +53,7 @@ public class RegisterDoctorCommandHandlerTests
         // Assert
         result.Error.Should().BeOfType<Error>();
         var error = result.Error;
-        error.Message.Should().Be("The informed email is already in use.");
-    }
-
-    [Fact]
-    public async Task Handle_ShouldReturnError_WhenSsnAlreadyInUse()
-    {
-        // Arrange
-        var command = new RegisterDoctorCommand(
-            Name: "Doctor",
-            Ssn: "123456789",
-            RegistrationState: UFs.SaoPaulo,
-            RegistrationNumber: 1234,
-            Specialty: MedicalSpecialties.GeneralPhysician,
-            Email: "doctor@example.com",
-            Password: "password"
-        );
-
-        _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithEmail(command.Email))
-            .Returns(false);
-
-        _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithSsn(command.Ssn))
-            .Returns(true);
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Handle
-        result.Error.Should().BeOfType<Error>();
-        var error = result.Error;
-        error.Message.Should().Be("The informed Social Security Number is already in use.");
-    }
-
-    [Fact]
-    public async Task Handle_ShouldReturnError_WhenRegistrationNumberIsAlreadyRegistered()
-    {
-        // Arrange
-        var command = new RegisterDoctorCommand(
-            Name: "Doctor",
-            Ssn: "123456789",
-            RegistrationState: UFs.SaoPaulo,
-            RegistrationNumber: 1234,
-            Specialty: MedicalSpecialties.GeneralPhysician,
-            Email: "doctor@example.com",
-            Password: "password"
-        );
-
-        _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithEmail(command.Email))
-            .Returns(false);
-
-        _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithSsn(command.Ssn))
-            .Returns(false);
-
-        _mockDoctorRepository
-            .Setup(repo => repo.IsRegisteredInState(command.RegistrationNumber, command.RegistrationState))
-            .Returns(true);
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.Error.Should().BeOfType<Error>();
-        var error = result.Error;
-        error.Message.Should().Be("The doctor's registration number is already in use in the informed state.");
+        error.Message.Should().Be(ErrorConstants.RegistrationNumberIsAlreadyInUseMessage);
     }
 
     [Fact]
@@ -128,23 +63,14 @@ public class RegisterDoctorCommandHandlerTests
         var command = new RegisterDoctorCommand(
             Name: "Doctor",
             Ssn: "123456789",
-            RegistrationState: UFs.SaoPaulo,
-            RegistrationNumber: 1234,
+            RegistrationNumber: 123456,
             Specialty: MedicalSpecialties.GeneralPhysician,
             Email: "doctor@example.com",
             Password: "password"
         );
 
         _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithEmail(command.Email))
-            .Returns(false);
-
-        _mockDoctorRepository
-            .Setup(repo => repo.ExistsWithSsn(command.Ssn))
-            .Returns(false);
-
-        _mockDoctorRepository
-            .Setup(repo => repo.IsRegisteredInState(command.RegistrationNumber, command.RegistrationState))
+            .Setup(repo => repo.IsRegistrationNumberInUse(command.RegistrationNumber))
             .Returns(false);
 
         _mockPasswordHasher

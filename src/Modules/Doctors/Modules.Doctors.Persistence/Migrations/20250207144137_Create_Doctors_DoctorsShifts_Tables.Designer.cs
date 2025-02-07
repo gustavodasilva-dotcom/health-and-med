@@ -12,8 +12,8 @@ using Modules.Doctors.Persistence;
 namespace Modules.Doctors.Persistence.Migrations
 {
     [DbContext(typeof(DoctorsDbContext))]
-    [Migration("20250207040212_Add_Specialty_Column_To_Doctors_Table")]
-    partial class Add_Specialty_Column_To_Doctors_Table
+    [Migration("20250207144137_Create_Doctors_DoctorsShifts_Tables")]
+    partial class Create_Doctors_DoctorsShifts_Tables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,10 +57,11 @@ namespace Modules.Doctors.Persistence.Migrations
                         .HasMaxLength(97)
                         .HasColumnType("nvarchar(97)");
 
+                    b.Property<int>("RegistrationNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("Specialty")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ssn")
                         .IsRequired()
@@ -74,53 +75,10 @@ namespace Modules.Doctors.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Ssn")
+                    b.HasIndex("RegistrationNumber")
                         .IsUnique();
 
                     b.ToTable("Doctors", "doctors");
-                });
-
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorRegistration", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("State", "Number")
-                        .IsUnique();
-
-                    b.ToTable("DoctorsRegistrations", "doctors");
                 });
 
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
@@ -134,7 +92,7 @@ namespace Modules.Doctors.Persistence.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<Guid>("DoctorRegistrationId")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndAt")
@@ -155,15 +113,15 @@ namespace Modules.Doctors.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorRegistrationId");
+                    b.HasIndex("DoctorId");
 
                     b.ToTable("DoctorsShifts", "doctors");
                 });
 
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorRegistration", b =>
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
                 {
                     b.HasOne("Modules.Doctors.Domain.Entities.Doctor", "Doctor")
-                        .WithMany("Registrations")
+                        .WithMany("Shifts")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -171,23 +129,7 @@ namespace Modules.Doctors.Persistence.Migrations
                     b.Navigation("Doctor");
                 });
 
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
-                {
-                    b.HasOne("Modules.Doctors.Domain.Entities.DoctorRegistration", "Registration")
-                        .WithMany("Shifts")
-                        .HasForeignKey("DoctorRegistrationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Registration");
-                });
-
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.Doctor", b =>
-                {
-                    b.Navigation("Registrations");
-                });
-
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorRegistration", b =>
                 {
                     b.Navigation("Shifts");
                 });

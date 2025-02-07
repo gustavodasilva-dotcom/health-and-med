@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Modules.Doctors.Domain.Enums;
+using Common.Shared.Contracts;
 
 namespace Modules.Doctors.Endpoints.Shifts;
 
@@ -13,8 +13,5 @@ internal sealed class GetShiftByIdResponseDoctor
     [JsonPropertyName("registration_number")]
     public required int RegistrationNumber { get; init; }
 
-    [JsonPropertyName("registration_state")]
-    public required UFs RegistrationState { get; init; }
-
-    public required string Ssn { get; init; }
+    public required EnumResponse Specialty { get; init; }
 }

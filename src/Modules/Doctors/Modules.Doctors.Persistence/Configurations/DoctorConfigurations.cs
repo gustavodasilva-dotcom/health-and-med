@@ -30,20 +30,12 @@ internal sealed class DoctorConfigurations : BaseEntityTypeConfiguration<Doctor>
             .HasMaxLength(DatabaseConstants.MaxLength97);
 
         builder
-            .Property(p => p.Specialty)
-            .HasDefaultValue(MedicalSpecialties.GeneralPhysician);
-
-        builder
-            .HasIndex(p => p.Ssn)
+            .HasIndex(p => p.RegistrationNumber)
             .IsUnique();
 
         builder
-            .HasIndex(p => p.Email)
-            .IsUnique();
-
-        builder
-            .HasMany(doctor => doctor.Registrations)
-            .WithOne(registration => registration.Doctor)
-            .HasForeignKey(registration => registration.DoctorId);
+            .HasMany(doctor => doctor.Shifts)
+            .WithOne(shift => shift.Doctor)
+            .HasForeignKey(shift => shift.DoctorId);
     }
 }

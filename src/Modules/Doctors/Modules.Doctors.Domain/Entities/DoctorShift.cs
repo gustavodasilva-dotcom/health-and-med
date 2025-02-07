@@ -4,23 +4,23 @@ namespace Modules.Doctors.Domain.Entities;
 
 public sealed class DoctorShift : BaseEntity
 {
-    private readonly DoctorRegistration? _registration = null;
+    private readonly Doctor? _doctor = null;
 
-    public Guid DoctorRegistrationId { get; private set; }
+    public Guid DoctorId { get; private set; }
 
     public required DateTime StartAt { get; set; }
 
     public required DateTime EndAt { get; set; }
 
     public override IEnumerable<object> GetAtomicValues()
-        => [DoctorRegistrationId, StartAt, EndAt];
+        => [DoctorId, StartAt, EndAt];
 
-    public DoctorRegistration Registration
+    public Doctor Doctor
     {
         get
         {
-            ArgumentNullException.ThrowIfNull(_registration);
-            return _registration;
+            ArgumentNullException.ThrowIfNull(_doctor);
+            return _doctor;
         }
     }
 

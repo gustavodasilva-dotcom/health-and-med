@@ -29,7 +29,7 @@ internal sealed class RegisterPatientCommandHandler(
                 "The email is already in use.");
         }
 
-        if (_patientRepository.ExistsWithCpf(request.Cpf))
+        if (_patientRepository.ExistsWithCpf(request.Ssn))
         {
             return new Error(
                 SharedErrorConstants.InvalidOperationTitle,
@@ -39,7 +39,7 @@ internal sealed class RegisterPatientCommandHandler(
         var patient = new Patient
         {
             Name = request.Name.Trim(),
-            Cpf = request.Cpf.Trim(),
+            Ssn = request.Ssn.Trim(),
             Email = request.Email.Trim(),
             Password = _passwordHasher.Hash(request.Password.Trim())
         };
