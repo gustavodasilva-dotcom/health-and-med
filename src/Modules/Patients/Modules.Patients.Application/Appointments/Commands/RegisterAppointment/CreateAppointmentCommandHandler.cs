@@ -39,7 +39,14 @@ namespace Modules.Patients.Application.Appointments.Commands.RegisterAppointment
                     ErrorConstants.PatientUnavailableMessage);
             }
 
-            //Adicionar validação do médico
+            if (!_patientAppointmentRepository.IsDoctorAvailable(request.DoctorId, request.StartAt, request.EndAt))
+            {
+                return new Error(
+                    SharedErrorConstants.InvalidOperationTitle,
+                    ErrorConstants.DoctorUnavailableMessage);
+            }
+
+            //Adicionar validação de agenda do médico
 
             var appointment = new PatientAppointment
             {

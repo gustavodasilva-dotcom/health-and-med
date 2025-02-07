@@ -11,5 +11,9 @@ namespace Modules.Patients.Persistence.Repositories
         public bool IsPatientAvailable(Guid patientId, DateTime startAt, DateTime endAt)
             => !DbContext.PatientAppointments
                 .Any(ap => ap.PatientId == patientId && startAt >= ap.StartAt && endAt <= ap.EndAt);
+
+        public bool IsDoctorAvailable(Guid doctorId, DateTime startAt, DateTime endAt)
+            => !DbContext.PatientAppointments
+                .Any(ap => ap.PatientId == doctorId && startAt >= ap.StartAt && endAt <= ap.EndAt);
     }
 }
