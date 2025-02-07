@@ -5,4 +5,5 @@ namespace Modules.Patients.Domain.Abstractions;
 
 public interface IPatientAppointmentRepository : IRepository<PatientAppointment>
 {
+    bool IsPatientAvailable(Guid patientId, DateTime startAt, DateTime endAt);
 }

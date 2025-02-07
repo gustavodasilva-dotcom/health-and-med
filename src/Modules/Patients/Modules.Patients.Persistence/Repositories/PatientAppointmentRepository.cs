@@ -8,5 +8,8 @@ namespace Modules.Patients.Persistence.Repositories
         Repository<PatientsDbContext, PatientAppointment>(dbContext),
         IPatientAppointmentRepository
     {
+        public bool IsPatientAvailable(Guid patientId, DateTime startAt, DateTime endAt)
+            => !DbContext.PatientAppointments
+                .Any(ap => ap.PatientId == patientId && startAt >= ap.StartAt && endAt <= ap.EndAt);
     }
 }

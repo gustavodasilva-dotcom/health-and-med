@@ -3,6 +3,7 @@ using Common.Shared.Constants;
 using Common.Shared.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Modules.Patients.Application.Constants;
 using Modules.Patients.Domain.Abstractions;
 using Modules.Patients.Domain.Entities;
 
@@ -31,7 +32,14 @@ namespace Modules.Patients.Application.Appointments.Commands.RegisterAppointment
                     StatusCodes.Status404NotFound);
             }
 
-            //Verificar se paciente ja tem algum consulta marcada para o mesmo horario
+            if (!_patientAppointmentRepository.IsPatientAvailable(request.PatientId, request.StartAt, request.EndAt))
+            {
+                return new Error(
+                    SharedErrorConstants.InvalidOperationTitle,
+                    ErrorConstants.PatientUnavailableMessage);
+            }
+
+            //Adicionar validação do médico
 
             var appointment = new PatientAppointment
             {
