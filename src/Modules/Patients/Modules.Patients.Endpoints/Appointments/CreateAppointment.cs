@@ -5,17 +5,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Modules.Patients.Application.Accesses.Commands.RegisterPatient;
+using Modules.Patients.Application.Appointments.Commands.RegisterAppointment;
 using Modules.Patients.Endpoints.Routes;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Modules.Patients.Endpoints.Appointments
 {
-    public sealed class RegisterAppointment : ICarterModule
+    public sealed class CreateAppointment : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost(AppointmentsRoutes.RegisterAppointment,
+            app.MapPost(AppointmentsRoutes.CreateAppointment,
             [SwaggerOperation(
                 Summary = "PT: Agendamento de consulta do paciente. EN: Patient's  appointment registration.",
                 Description = @"
@@ -26,10 +26,10 @@ namespace Modules.Patients.Endpoints.Appointments
             [SwaggerResponse(StatusCodes.Status500InternalServerError)]
             async (
                 ISender sender,
-                [FromBody] RegisterAppointmentRequest request
+                [FromBody] CreateAppointmentRequest request
             ) =>
             {
-                var command = request.Adapt<RegisterPatientCommand>();
+                var command = request.Adapt<CreateAppointmentCommand>();
                 var result = await sender.Send(command);
                 if (result.IsFailure)
                 {

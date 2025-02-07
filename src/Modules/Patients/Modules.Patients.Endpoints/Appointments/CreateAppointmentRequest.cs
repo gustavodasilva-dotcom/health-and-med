@@ -2,7 +2,7 @@
 
 namespace Modules.Patients.Endpoints.Appointments
 {
-    internal sealed class RegisterAppointmentRequest
+    internal sealed class CreateAppointmentRequest
     {
         [JsonPropertyName("patient_id")]
         public required Guid PatientId { get; init; }

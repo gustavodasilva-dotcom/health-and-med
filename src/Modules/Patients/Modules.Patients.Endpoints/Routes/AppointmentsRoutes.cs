@@ -4,6 +4,6 @@
     {
         public const string Tags = "Patient's Appointments";
 
-        public const string RegisterAppointment = "api/patients/appointments/register";
+        public const string CreateAppointment = "api/patients/appointments";
     }
 }
