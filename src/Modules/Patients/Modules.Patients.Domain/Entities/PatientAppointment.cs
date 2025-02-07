@@ -8,6 +8,8 @@ namespace Modules.Patients.Domain.Entities
 
         public Guid PatientId { get; private set; }
 
+        public Guid DoctorId { get; private set; }
+
         public required DateTime StartAt { get; set; }
 
         public required DateTime EndAt { get; set; }
