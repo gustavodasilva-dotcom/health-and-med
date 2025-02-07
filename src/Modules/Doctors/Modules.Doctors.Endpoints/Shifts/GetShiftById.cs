@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AutoMapper;
+using Carter;
 using Common.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +18,7 @@ public sealed class GetShiftById : ICarterModule
     {
         app.MapGet(ShiftsRoutes.GetShiftById, async (
             ISender sender,
+            IMapper mapper,
             [FromRoute] Guid id) =>
         {
             var result = await sender.Send(new GetShiftByIdQuery(id));
@@ -26,7 +28,8 @@ public sealed class GetShiftById : ICarterModule
             }
             else
             {
-                return Results.Ok(result);
+                var response = mapper.Map<GetShiftByIdResponse>(result);
+                return Results.Ok(response);
             }
         })
         .WithTags(ShiftsRoutes.Tags)

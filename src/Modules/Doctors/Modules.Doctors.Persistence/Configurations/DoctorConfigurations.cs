@@ -1,7 +1,9 @@
 using Common.Shared.Abstractions;
 using Common.Shared.Constants;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Modules.Doctors.Domain.Entities;
+using Modules.Doctors.Domain.Enums;
 
 namespace Modules.Doctors.Persistence.Configurations;
 
@@ -26,6 +28,10 @@ internal sealed class DoctorConfigurations : BaseEntityTypeConfiguration<Doctor>
         builder
             .Property(p => p.Password)
             .HasMaxLength(DatabaseConstants.MaxLength97);
+
+        builder
+            .Property(p => p.Specialty)
+            .HasDefaultValue(MedicalSpecialties.GeneralPhysician);
 
         builder
             .HasIndex(p => p.Ssn)

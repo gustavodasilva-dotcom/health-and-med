@@ -9,6 +9,7 @@ public sealed record RegisterDoctorCommand(
     string Ssn,
     UFs RegistrationState,
     int RegistrationNumber,
+    MedicalSpecialties Specialty,
     string Email,
     string Password
 ) : IRequest<Result>;

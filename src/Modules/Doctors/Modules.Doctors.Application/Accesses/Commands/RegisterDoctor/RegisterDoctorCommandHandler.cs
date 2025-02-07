@@ -48,7 +48,8 @@ internal sealed class RegisterDoctorCommandHandler(
             Name = request.Name.Trim(),
             Ssn = request.Ssn.Trim(),
             Email = request.Email.Trim(),
-            Password = _passwordHasher.Hash(request.Password.Trim())
+            Password = _passwordHasher.Hash(request.Password.Trim()),
+            Specialty = request.Specialty
         };
         doctor.AddRegistration(request.RegistrationNumber, request.RegistrationState);
 

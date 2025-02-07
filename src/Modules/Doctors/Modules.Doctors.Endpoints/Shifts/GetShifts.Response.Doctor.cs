@@ -8,9 +8,4 @@ internal sealed class GetShiftsResponseDoctor
 
     [JsonPropertyName("name")]
     public required string Name { get; init; }
-
-    [JsonPropertyName("registration_id")]
-    public required int RegistrationId { get; init; }
-
-    public required string Ssn { get; init; }
 }

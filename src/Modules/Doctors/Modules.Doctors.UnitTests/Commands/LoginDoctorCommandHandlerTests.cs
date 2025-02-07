@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
+using Modules.Doctors.Domain.Enums;
 using Moq;
 
 namespace Modules.Doctors.UnitTests.Commands;
@@ -32,14 +33,17 @@ public class LoginDoctorCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldReturnError_WhenDoctorNotFound()
     {
+        // Arrange
         var command = new LoginDoctorCommand("doctor@exemple.com", "password");
 
         _mockDoctorRepository
             .Setup(repo => repo.GetWithEmail(It.IsAny<string>()))
             .Returns((Doctor?)null);
 
+        // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
+        // Assert
         result.Error.Should().BeOfType<Error>();
         var error = result.Error;
         error?.Message.Should().Be("No doctor was found with the given email.");
@@ -49,12 +53,14 @@ public class LoginDoctorCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldReturnError_WhenPasswordIsIncorrect()
     {
+        // Arrange
         var doctor = new Doctor
         {
             Name = "doctor",
             Ssn = "123456",
             Email = "doctor@example.com",
-            Password = "hashedPassword"
+            Password = "hashedPassword",
+            Specialty = MedicalSpecialties.GeneralPhysician
         };
 
         var command = new LoginDoctorCommand("doctor@exemple.com", "password");
@@ -67,8 +73,10 @@ public class LoginDoctorCommandHandlerTests
             .Setup(ph => ph.Verify(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(false);
 
+        // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
+        // Assert
         result.Error.Should().BeOfType<Error>();
         var error = result.Error;
         error?.Message.Should().Be("The given password is incorrect.");
@@ -77,15 +85,17 @@ public class LoginDoctorCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldReturnToken_WhenLoginIsSuccessful()
     {
+        // Arrange
         var doctor = new Doctor
         {
             Name = "doctor",
             Ssn = "123456",
             Email = "doctor@example.com",
-            Password = "hashedPassword"
+            Password = "hashedPassword",
+            Specialty = MedicalSpecialties.GeneralPhysician
         };
 
-        var command = new LoginDoctorCommand("doctor@exemple.com", "password");
+        var command = new LoginDoctorCommand(Email: "doctor@exemple.com", Password: "password");
 
         _mockDoctorRepository
             .Setup(repo => repo.GetWithEmail(It.IsAny<string>()))
@@ -99,10 +109,11 @@ public class LoginDoctorCommandHandlerTests
             .Setup(t => t.Create(It.IsAny<Doctor>(), It.IsAny<string>()))
             .Returns("mock-token");
 
+        // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
+        // Assert
         Assert.True(result.IsSuccess);
-
         result.Value.Should().Be("mock-token");
     }
 }

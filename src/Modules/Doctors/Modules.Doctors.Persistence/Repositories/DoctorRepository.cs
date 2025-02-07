@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Common.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Modules.Doctors.Domain.Abstractions;
@@ -10,6 +11,11 @@ internal sealed class DoctorRepository(DoctorsDbContext dbContext) :
     Repository<DoctorsDbContext, Doctor>(dbContext),
     IDoctorRepository
 {
+    public override IEnumerable<Doctor> Get(Expression<Func<Doctor, bool>> filter)
+        => DbContext.Doctors
+            .Include(doctor => doctor.Registrations)
+            .Where(filter);
+
     public override Doctor? GetById(Guid id)
         => DbContext.Doctors
             .Include(doctor => doctor.Registrations)

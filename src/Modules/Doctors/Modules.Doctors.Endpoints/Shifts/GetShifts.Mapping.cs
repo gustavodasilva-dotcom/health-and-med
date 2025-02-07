@@ -17,13 +17,7 @@ public sealed class GetShiftsMapping : Profile
                 dest => dest.Id,
                 opt => opt.MapFrom(src => src.DoctorId))
             .ForMember(
-                dest => dest.RegistrationId,
-                opt => opt.MapFrom(src => src.Number))
-            .ForMember(
                 dest => dest.Name,
-                opt => opt.MapFrom(src => src.Doctor.Name))
-            .ForMember(
-                dest => dest.Ssn,
-                opt => opt.MapFrom(src => src.Doctor.Ssn));
+                opt => opt.MapFrom(src => src.Doctor.Name));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Carter;
 using Common.Shared.Constants;
+using Mapster;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +31,8 @@ public sealed class UpdateShift : ICarterModule
             }
             else
             {
-                return Results.Ok(result);
+                var response = result.Value.Adapt<UpdateShiftResponse>();
+                return Results.Ok(response);
             }
         })
         .WithTags(ShiftsRoutes.Tags)
