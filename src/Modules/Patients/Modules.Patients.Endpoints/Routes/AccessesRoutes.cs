@@ -7,4 +7,6 @@ internal static class AccessesRoutes
     public const string RegisterPatient = "api/patients/accesses/register";
 
     public const string LoginPatient = "api/patients/accesses/login";
+
+
 }
