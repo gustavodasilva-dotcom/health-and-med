@@ -23,6 +23,8 @@ internal static class EndpointsDependenciesExtensions
         services.AddCarter(
             new DependencyContextAssemblyCatalog(endpointsAssemblies));
 
+        services.AddAutoMapper(endpointsAssemblies);
+
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Modules.Doctors.Endpoints.AssemblyReference.Assembly);
 

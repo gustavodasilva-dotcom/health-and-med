@@ -16,7 +16,7 @@ public sealed class CreateShift : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(ShiftsRoutes.InsertShift, async (
+        app.MapPost(ShiftsRoutes.CreateShift, async (
             ISender sender,
             [FromBody] CreateShiftRequest request) =>
         {

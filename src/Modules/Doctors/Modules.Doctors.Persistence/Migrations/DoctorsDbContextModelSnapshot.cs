@@ -166,7 +166,7 @@ namespace Modules.Doctors.Persistence.Migrations
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
                 {
                     b.HasOne("Modules.Doctors.Domain.Entities.DoctorRegistration", "Registration")
-                        .WithMany("Schedules")
+                        .WithMany("Shifts")
                         .HasForeignKey("DoctorRegistrationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -181,7 +181,7 @@ namespace Modules.Doctors.Persistence.Migrations
 
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorRegistration", b =>
                 {
-                    b.Navigation("Schedules");
+                    b.Navigation("Shifts");
                 });
 #pragma warning restore 612, 618
         }

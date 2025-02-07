@@ -8,7 +8,7 @@ internal static class ShiftsRoutes
     
     public const string GetShiftById = "api/doctors/shifts/{id:guid}";
     
-    public const string InsertShift = "api/doctors/shifts";
+    public const string CreateShift = "api/doctors/shifts";
     
     public const string UpdateShift = "api/doctors/shifts/{id:guid}";
     

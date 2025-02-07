@@ -1,4 +1,6 @@
-﻿using Common.Shared.Repositories;
+﻿using System.Linq.Expressions;
+using Common.Shared.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
 
@@ -11,4 +13,11 @@ internal sealed class DoctorShiftRepository(DoctorsDbContext dbContext) :
     public bool IsShiftAvailable(DateTime startAt, DateTime endAt)
         => !DbContext.DoctorsShifts
             .Any(shift => startAt >= shift.StartAt && endAt <= shift.EndAt);
+
+    public override IEnumerable<DoctorShift> Get(Expression<Func<DoctorShift, bool>> filter)
+        => DbContext.DoctorsShifts
+            .Include(shift => shift.Registration)
+                .ThenInclude(registration => registration.Doctor)
+            .AsSplitQuery()
+            .Where(filter);
 }
