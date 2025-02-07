@@ -27,35 +27,39 @@ public class GetDoctorsQueryHandlerTests
         => [
             new Doctor
             {
-                Email = StringHelpers.GenerateRandomString(),
                 Name = StringHelpers.GenerateRandomString(),
                 Ssn = StringHelpers.GenerateRandomString(),
-                Password = StringHelpers.GenerateRandomString(),
-                Specialty = MedicalSpecialties.AllergyAndImmunology
+                RegistrationNumber = 111111,
+                Specialty = MedicalSpecialties.AllergyAndImmunology,
+                Email = StringHelpers.GenerateRandomString(),
+                Password = StringHelpers.GenerateRandomString()
             },
             new Doctor
             {
-                Email = StringHelpers.GenerateRandomString(),
                 Name = StringHelpers.GenerateRandomString(),
                 Ssn = StringHelpers.GenerateRandomString(),
+                RegistrationNumber = 111112,
+                Specialty = MedicalSpecialties.PhysicalMedicineAndRehabilitation,
+                Email = StringHelpers.GenerateRandomString(),
                 Password = StringHelpers.GenerateRandomString(),
-                Specialty = MedicalSpecialties.PhysicalMedicineAndRehabilitation
             },
             new Doctor
             {
-                Email = StringHelpers.GenerateRandomString(),
                 Name = StringHelpers.GenerateRandomString(),
                 Ssn = StringHelpers.GenerateRandomString(),
-                Password = StringHelpers.GenerateRandomString(),
-                Specialty = MedicalSpecialties.FamilyMedicine
+                RegistrationNumber = 111113,
+                Specialty = MedicalSpecialties.FamilyMedicine,
+                Email = StringHelpers.GenerateRandomString(),
+                Password = StringHelpers.GenerateRandomString()
             },
             new Doctor
             {
-                Email = StringHelpers.GenerateRandomString(),
                 Name = StringHelpers.GenerateRandomString(),
                 Ssn = StringHelpers.GenerateRandomString(),
+                RegistrationNumber = 111114,
+                Specialty = MedicalSpecialties.Neurology,
+                Email = StringHelpers.GenerateRandomString(),
                 Password = StringHelpers.GenerateRandomString(),
-                Specialty = MedicalSpecialties.Neurology
             }
         ];
 
@@ -68,11 +72,7 @@ public class GetDoctorsQueryHandlerTests
             .Setup(repo => repo.Get(_ => true))
             .Returns(doctors);
 
-        var query = new GetDoctorsQuery(
-            Name: null,
-            Specialty: MedicalSpecialties.Neurology,
-            State: null
-        );
+        var query = new GetDoctorsQuery(Name: null, MedicalSpecialties.Neurology);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -96,11 +96,7 @@ public class GetDoctorsQueryHandlerTests
             .Setup(repo => repo.Get(_ => true))
             .Returns(doctors);
 
-        var query = new GetDoctorsQuery(
-            Name: null,
-            Specialty: MedicalSpecialties.NuclearMedicine,
-            State: null
-        );
+        var query = new GetDoctorsQuery(Name: null, MedicalSpecialties.NuclearMedicine);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);

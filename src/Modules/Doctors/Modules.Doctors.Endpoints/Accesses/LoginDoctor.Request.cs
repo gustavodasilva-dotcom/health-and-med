@@ -1,8 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace Modules.Doctors.Endpoints.Accesses;
 
 internal sealed class LoginDoctorRequest
 {
-    public required string Email { get; init; }
+    [JsonPropertyName("registration_number")]
+    public required int RegistrationNumber { get; init; }
 
     public required string Password { get; init; }
 }

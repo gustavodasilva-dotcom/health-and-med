@@ -22,36 +22,22 @@ internal sealed class RegisterDoctorCommandHandler(
         RegisterDoctorCommand request,
         CancellationToken cancellationToken)
     {
-        if (_doctorRepository.ExistsWithEmail(request.Email))
+        if (_doctorRepository.IsRegistrationNumberInUse(request.RegistrationNumber))
         {
             return new Error(
                 SharedErrorConstants.InvalidOperationTitle,
-                "The informed email is already in use.");
-        }
-
-        if (_doctorRepository.ExistsWithSsn(request.Ssn))
-        {
-            return new Error(
-                SharedErrorConstants.InvalidOperationTitle,
-                "The informed Social Security Number is already in use.");
-        }
-
-        if (_doctorRepository.IsRegisteredInState(request.RegistrationNumber, request.RegistrationState))
-        {
-            return new Error(
-                SharedErrorConstants.InvalidOperationTitle,
-                ErrorConstants.RegistrationNumberIsRegisteredInStateMessage);
+                ErrorConstants.RegistrationNumberIsAlreadyInUseMessage);
         }
 
         var doctor = new Doctor
         {
             Name = request.Name.Trim(),
             Ssn = request.Ssn.Trim(),
+            RegistrationNumber = request.RegistrationNumber,
+            Specialty = request.Specialty,
             Email = request.Email.Trim(),
             Password = _passwordHasher.Hash(request.Password.Trim()),
-            Specialty = request.Specialty
         };
-        doctor.AddRegistration(request.RegistrationNumber, request.RegistrationState);
 
         _doctorRepository.Add(doctor);
 

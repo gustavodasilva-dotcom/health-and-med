@@ -3,6 +3,7 @@ using Common.Shared.Constants;
 using Common.Shared.Security;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 
 namespace Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
@@ -21,12 +22,12 @@ internal sealed class LoginDoctorCommandHandler(
         LoginDoctorCommand request,
         CancellationToken cancellationToken)
     {
-        var doctor = _doctorRepository.GetWithEmail(request.Email);
+        var doctor = _doctorRepository.GetByRegistrationNumber(request.RegistrationNumber);
         if (doctor is null)
         {
             return new Error(
                 SharedErrorConstants.NotFoundTitle,
-                "No doctor was found with the given email.",
+                ErrorConstants.NoDoctorWasFoundWithTheGivenRegistrationNumberMessage,
                 StatusCodes.Status404NotFound);
         }
 

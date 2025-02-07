@@ -21,10 +21,9 @@ public sealed class GetDoctors : ICarterModule
             ISender sender,
             IMapper mapper,
             [FromQuery] string? name,
-            [FromQuery] MedicalSpecialties? specialty,
-            [FromQuery] UFs? state) =>
+            [FromQuery] MedicalSpecialties? specialty) =>
         {
-            var query = mapper.Map<GetDoctorsQuery>((name, specialty, state));
+            var query = mapper.Map<GetDoctorsQuery>((name, specialty));
             var result = await sender.Send(query);
             if (!result.Any())
             {

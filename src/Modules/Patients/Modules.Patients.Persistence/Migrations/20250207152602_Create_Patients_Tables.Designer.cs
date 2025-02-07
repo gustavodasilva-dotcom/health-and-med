@@ -12,7 +12,7 @@ using Modules.Patients.Persistence;
 namespace Modules.Patients.Persistence.Migrations
 {
     [DbContext(typeof(PatientsDbContext))]
-    [Migration("20250205014512_Create_Patients_Tables")]
+    [Migration("20250207152602_Create_Patients_Tables")]
     partial class Create_Patients_Tables
     {
         /// <inheritdoc />
@@ -31,11 +31,6 @@ namespace Modules.Patients.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -62,6 +57,11 @@ namespace Modules.Patients.Persistence.Migrations
                         .HasMaxLength(97)
                         .HasColumnType("nvarchar(97)");
 
+                    b.Property<string>("Ssn")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -69,10 +69,10 @@ namespace Modules.Patients.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Cpf")
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Email")
+                    b.HasIndex("Ssn")
                         .IsUnique();
 
                     b.ToTable("Patients", "patients");

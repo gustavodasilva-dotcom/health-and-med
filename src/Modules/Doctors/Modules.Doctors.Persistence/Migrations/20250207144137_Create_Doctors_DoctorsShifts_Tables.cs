@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Modules.Doctors.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Create_Doctors_And_DoctorsRegistrations_Tables : Migration
+    public partial class Create_Doctors_DoctorsShifts_Tables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,8 @@ namespace Modules.Doctors.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false),
                     Ssn = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    RegistrationNumber = table.Column<int>(type: "int", nullable: false),
+                    Specialty = table.Column<int>(type: "int", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(97)", maxLength: 97, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
@@ -34,23 +36,23 @@ namespace Modules.Doctors.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoctorsRegistrations",
+                name: "DoctorsShifts",
                 schema: "doctors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    StartAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DoctorsRegistrations", x => x.Id);
+                    table.PrimaryKey("PK_DoctorsShifts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DoctorsRegistrations_Doctors_DoctorId",
+                        name: "FK_DoctorsShifts_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalSchema: "doctors",
                         principalTable: "Doctors",
@@ -59,38 +61,24 @@ namespace Modules.Doctors.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doctors_Email",
+                name: "IX_Doctors_RegistrationNumber",
                 schema: "doctors",
                 table: "Doctors",
-                column: "Email",
+                column: "RegistrationNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doctors_Ssn",
+                name: "IX_DoctorsShifts_DoctorId",
                 schema: "doctors",
-                table: "Doctors",
-                column: "Ssn",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DoctorsRegistrations_DoctorId",
-                schema: "doctors",
-                table: "DoctorsRegistrations",
+                table: "DoctorsShifts",
                 column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DoctorsRegistrations_State_Number",
-                schema: "doctors",
-                table: "DoctorsRegistrations",
-                columns: new[] { "State", "Number" },
-                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DoctorsRegistrations",
+                name: "DoctorsShifts",
                 schema: "doctors");
 
             migrationBuilder.DropTable(

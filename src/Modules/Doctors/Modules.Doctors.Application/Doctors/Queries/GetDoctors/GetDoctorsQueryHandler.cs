@@ -26,12 +26,6 @@ internal sealed class GetDoctorsQueryHandler(IDoctorRepository doctorRepository)
             doctors = doctors.Where(doctor => doctor.Specialty == request.Specialty);
         }
 
-        if (request.State is not null)
-        {
-            doctors = doctors.Where(doctor => doctor
-                .Registrations.Any(reg => reg.State == request.State));
-        }
-
         return Task.FromResult(doctors);
     }
 }

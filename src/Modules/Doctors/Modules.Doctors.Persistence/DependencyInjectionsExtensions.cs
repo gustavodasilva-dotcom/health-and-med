@@ -23,7 +23,6 @@ public static class DependencyInjectionsExtensions
                         PersistenceConstants.DefaultSchema)))
             .AddScoped<IDoctorsUnitOfWork, DoctorsUnitOfWork>()
             .AddScoped<IDoctorRepository, DoctorRepository>()
-            .AddScoped<IDoctorRegistrationRepository, DoctorRegistrationRepository>()
             .AddScoped<IDoctorShiftRepository, DoctorShiftRepository>();
 
     public static void UsePersistence(this IApplicationBuilder app)

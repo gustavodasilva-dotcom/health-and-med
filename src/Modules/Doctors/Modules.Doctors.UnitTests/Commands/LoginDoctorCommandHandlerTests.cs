@@ -3,6 +3,7 @@ using Common.Shared.Security;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Modules.Doctors.Application.Accesses.Commands.LoginDoctor;
+using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
 using Modules.Doctors.Domain.Enums;
@@ -34,10 +35,10 @@ public class LoginDoctorCommandHandlerTests
     public async Task Handle_ShouldReturnError_WhenDoctorNotFound()
     {
         // Arrange
-        var command = new LoginDoctorCommand("doctor@exemple.com", "password");
+        var command = new LoginDoctorCommand(123456, "password");
 
         _mockDoctorRepository
-            .Setup(repo => repo.GetWithEmail(It.IsAny<string>()))
+            .Setup(repo => repo.GetByRegistrationNumber(It.IsAny<int>()))
             .Returns((Doctor?)null);
 
         // Act
@@ -46,8 +47,8 @@ public class LoginDoctorCommandHandlerTests
         // Assert
         result.Error.Should().BeOfType<Error>();
         var error = result.Error;
-        error?.Message.Should().Be("No doctor was found with the given email.");
-        error?.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        error!.Message.Should().Be(ErrorConstants.NoDoctorWasFoundWithTheGivenRegistrationNumberMessage);
+        error!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
 
     [Fact]
@@ -58,15 +59,16 @@ public class LoginDoctorCommandHandlerTests
         {
             Name = "doctor",
             Ssn = "123456",
+            RegistrationNumber = 123456,
+            Specialty = MedicalSpecialties.GeneralPhysician,
             Email = "doctor@example.com",
             Password = "hashedPassword",
-            Specialty = MedicalSpecialties.GeneralPhysician
         };
 
-        var command = new LoginDoctorCommand("doctor@exemple.com", "password");
+        var command = new LoginDoctorCommand(doctor.RegistrationNumber, "password");
 
         _mockDoctorRepository
-            .Setup(repo => repo.GetWithEmail(It.IsAny<string>()))
+            .Setup(repo => repo.GetByRegistrationNumber(It.IsAny<int>()))
             .Returns(doctor);
 
         _mockPasswordHasher
@@ -79,7 +81,7 @@ public class LoginDoctorCommandHandlerTests
         // Assert
         result.Error.Should().BeOfType<Error>();
         var error = result.Error;
-        error?.Message.Should().Be("The given password is incorrect.");
+        error!.Message.Should().Be("The given password is incorrect.");
     }
 
     [Fact]
@@ -90,15 +92,16 @@ public class LoginDoctorCommandHandlerTests
         {
             Name = "doctor",
             Ssn = "123456",
+            RegistrationNumber = 123456,
+            Specialty = MedicalSpecialties.GeneralPhysician,
             Email = "doctor@example.com",
-            Password = "hashedPassword",
-            Specialty = MedicalSpecialties.GeneralPhysician
+            Password = "hashedPassword"
         };
 
-        var command = new LoginDoctorCommand(Email: "doctor@exemple.com", Password: "password");
+        var command = new LoginDoctorCommand(doctor.RegistrationNumber, "password");
 
         _mockDoctorRepository
-            .Setup(repo => repo.GetWithEmail(It.IsAny<string>()))
+            .Setup(repo => repo.GetByRegistrationNumber(It.IsAny<int>()))
             .Returns(doctor);
 
         _mockPasswordHasher

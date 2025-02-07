@@ -10,15 +10,11 @@ public sealed class GetDoctorsMapping : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<(string? name, MedicalSpecialties? specialty, UFs? state), GetDoctorsQuery>()
+        config.NewConfig<(string? name, MedicalSpecialties? specialty), GetDoctorsQuery>()
             .Map(dest => dest.Name, src => src.name)
-            .Map(dest => dest.Specialty, src => src.specialty)
-            .Map(dest => dest.State, src => src.state);
+            .Map(dest => dest.Specialty, src => src.specialty);
 
         config.NewConfig<Doctor, GetDoctorsResponse>()
             .Map(dest => dest.Specialty, src => src.Specialty.ToEnumResponse());
-
-        config.NewConfig<DoctorRegistration, GetDoctorsResponseRegistrations>()
-            .Map(dest => dest.State, src => src.State.ToEnumResponse());
     }
 }

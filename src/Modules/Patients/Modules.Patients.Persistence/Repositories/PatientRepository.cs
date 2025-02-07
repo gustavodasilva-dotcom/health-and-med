@@ -14,7 +14,7 @@ internal sealed class PatientRepository(PatientsDbContext dbContext) :
 
     public bool ExistsWithCpf(string cpf)
         => DbContext.Patients
-            .Any(patient => patient.Cpf == cpf);
+            .Any(patient => patient.Ssn == cpf);
 
     public Patient? GetWithEmail(string email)
         => DbContext.Patients

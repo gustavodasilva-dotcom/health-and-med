@@ -1,8 +1,8 @@
-﻿using System.Linq.Expressions;
-using Common.Shared.Repositories;
+﻿using Common.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Modules.Doctors.Persistence.Repositories;
 
@@ -16,14 +16,12 @@ internal sealed class DoctorShiftRepository(DoctorsDbContext dbContext) :
 
     public override DoctorShift? GetById(Guid id)
         => DbContext.DoctorsShifts
-            .Include(shift => shift.Registration)
-                .ThenInclude(registration => registration.Doctor)
+            .Include(shift => shift.Doctor)
             .SingleOrDefault(shift => shift.Id == id);
 
     public override IEnumerable<DoctorShift> Get(Expression<Func<DoctorShift, bool>> filter)
         => DbContext.DoctorsShifts
-            .Include(shift => shift.Registration)
-                .ThenInclude(registration => registration.Doctor)
+            .Include(shift => shift.Doctor)
             .AsSplitQuery()
             .Where(filter);
 }

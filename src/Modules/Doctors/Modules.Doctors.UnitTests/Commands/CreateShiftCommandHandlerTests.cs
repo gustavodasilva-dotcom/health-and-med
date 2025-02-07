@@ -36,15 +36,14 @@ public class CreateShiftCommandHandlerTests
         {
             Name = "doctor",
             Ssn = "123456",
+            RegistrationNumber = 123456,
+            Specialty = MedicalSpecialties.GeneralPhysician,
             Email = "doctor@example.com",
             Password = "hashedPassword",
-            Specialty = MedicalSpecialties.GeneralPhysician
         };
-        doctor.AddRegistration(123456, UFs.SaoPaulo);
 
         var request = new CreateShiftCommand(
             DoctorId: doctor.Id,
-            RegistrationId: doctor.Registrations.First().Id,
             StartAt: DateTime.UtcNow,
             EndAt: DateTime.UtcNow.AddHours(1));
 
@@ -74,15 +73,14 @@ public class CreateShiftCommandHandlerTests
         {
             Name = "doctor",
             Ssn = "123456",
+            RegistrationNumber = 123456,
+            Specialty = MedicalSpecialties.GeneralPhysician,
             Email = "doctor@example.com",
-            Password = "hashedPassword",
-            Specialty = MedicalSpecialties.GeneralPhysician
+            Password = "hashedPassword"
         };
-        doctor.AddRegistration(123456, UFs.SaoPaulo);
 
         var request = new CreateShiftCommand(
             DoctorId: doctor.Id,
-            RegistrationId: doctor.Registrations.First().Id,
             StartAt: DateTime.UtcNow,
             EndAt: DateTime.UtcNow.AddHours(1));
 

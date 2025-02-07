@@ -12,8 +12,6 @@ internal sealed class DoctorsDbContext(
 ) : BaseDbContext<DoctorsDbContext>(publisher, options)
 {
     public DbSet<Doctor> Doctors { get; set; }
-
-    public DbSet<DoctorRegistration> DoctorsRegistrations { get; set; }
     
     public DbSet<DoctorShift> DoctorsShifts { get; set; }
 
