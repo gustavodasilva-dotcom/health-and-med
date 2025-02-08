@@ -81,7 +81,7 @@ public class RegisterDoctorCommandHandlerTests
         var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result>();
+        result.Should().BeOfType<Result<Guid>>();
         result.IsSuccess.Should().BeTrue();
         _mockDoctorRepository.Verify(repo => repo.Add(It.IsAny<Doctor>()), Times.Once);
         _mockUnitOfWork.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Once);

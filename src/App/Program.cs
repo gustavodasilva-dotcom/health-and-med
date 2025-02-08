@@ -3,8 +3,10 @@ using App.Middlewares;
 using Common.DependencyInjection;
 using Common.Shared.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,11 @@ builder.Services.AddSwaggerGenWithAuth();
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 builder.Services.AddApplicationServices(builder.Configuration);
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(SecurityPolices.DoctorsOnly, x => x.RequireRole(UserRoles.Doctor))

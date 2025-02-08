@@ -11,4 +11,4 @@ public sealed record RegisterDoctorCommand(
     MedicalSpecialties Specialty,
     string Email,
     string Password
-) : IRequest<Result>;
+) : IRequest<Result<Guid>>;

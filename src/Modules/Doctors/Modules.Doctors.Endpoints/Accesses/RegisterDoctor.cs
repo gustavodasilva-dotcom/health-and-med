@@ -37,7 +37,7 @@ public sealed class RegisterDoctor : ICarterModule
             }
             else
             {
-                return Results.Created();
+                return Results.Created(uri: string.Empty, result.Value);
             }
         })
         .WithTags(AccessesRoutes.Tags)

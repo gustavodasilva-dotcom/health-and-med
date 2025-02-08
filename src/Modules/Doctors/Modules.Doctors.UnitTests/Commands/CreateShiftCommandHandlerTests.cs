@@ -113,6 +113,7 @@ public class CreateShiftCommandHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
+        result.Should().BeOfType<Result<Guid>>();
         result.IsSuccess.Should().BeTrue();
         _mockDoctorShiftRepository.Verify(repo => repo.Add(It.IsAny<DoctorShift>()), Times.Once);
         _mockUnitOfWork.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

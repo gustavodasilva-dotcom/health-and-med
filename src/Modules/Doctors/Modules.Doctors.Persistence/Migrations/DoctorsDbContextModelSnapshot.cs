@@ -115,6 +115,49 @@ namespace Modules.Doctors.Persistence.Migrations
                     b.ToTable("DoctorsShifts", "doctors");
                 });
 
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<Guid>("DoctorShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorShiftId")
+                        .IsUnique();
+
+                    b.HasIndex("DoctorShiftId", "PatientId")
+                        .IsUnique();
+
+                    b.ToTable("DoctorsShiftsAppointments", "doctors");
+                });
+
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
                 {
                     b.HasOne("Modules.Doctors.Domain.Entities.Doctor", "Doctor")
@@ -126,9 +169,21 @@ namespace Modules.Doctors.Persistence.Migrations
                     b.Navigation("Doctor");
                 });
 
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", b =>
+                {
+                    b.HasOne("Modules.Doctors.Domain.Entities.DoctorShift", null)
+                        .WithOne("Appointment")
+                        .HasForeignKey("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", "DoctorShiftId");
+                });
+
             modelBuilder.Entity("Modules.Doctors.Domain.Entities.Doctor", b =>
                 {
                     b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
+                {
+                    b.Navigation("Appointment");
                 });
 #pragma warning restore 612, 618
         }
