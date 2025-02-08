@@ -45,7 +45,7 @@ public class AppointmentCreatedIntegrationEventHandler(
         var shiftAppointment = new DoctorShiftAppointment
         {
             PatientId = message.PatientId,
-            Status = AppointmentStatus.WaitingOnDoctorsAnalysis
+            Status = AppointmentStatus.PendingDoctorAnalysis
         };
         doctorShift.AddAppointment(shiftAppointment);
 
