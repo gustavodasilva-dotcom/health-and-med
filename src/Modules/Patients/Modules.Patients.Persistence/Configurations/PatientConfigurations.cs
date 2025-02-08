@@ -34,5 +34,10 @@ internal sealed class PatientConfigurations : BaseEntityTypeConfiguration<Patien
         builder
             .HasIndex(p => p.Email)
             .IsUnique();
+
+        builder
+            .HasMany(p => p.Appointments)
+            .WithOne(appointment => appointment.Patient)
+            .HasForeignKey(appointment => appointment.PatientId);
     }
 }

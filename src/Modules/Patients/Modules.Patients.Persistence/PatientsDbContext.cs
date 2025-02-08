@@ -12,7 +12,8 @@ internal sealed class PatientsDbContext(
 ) : BaseDbContext<PatientsDbContext>(publisher, options)
 {
     public DbSet<Patient> Patients { get; set; }
-    public DbSet<PatientAppointment> PatientAppointments { get; set; }
+
+    public DbSet<PatientAppointment> PatientsAppointments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

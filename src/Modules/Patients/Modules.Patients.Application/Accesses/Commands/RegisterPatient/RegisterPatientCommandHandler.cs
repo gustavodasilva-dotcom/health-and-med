@@ -12,13 +12,13 @@ internal sealed class RegisterPatientCommandHandler(
     IPasswordHasher passwordHasher,
     IPatientRepository patientRepository,
     IPatientsUnitOfWork unitOfWork) :
-    IRequestHandler<RegisterPatientCommand, Result>
+    IRequestHandler<RegisterPatientCommand, Result<Guid>>
 {
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
     private readonly IPatientRepository _patientRepository = patientRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result> Handle(
+    public async Task<Result<Guid>> Handle(
         RegisterPatientCommand request,
         CancellationToken cancellationToken)
     {
@@ -33,7 +33,7 @@ internal sealed class RegisterPatientCommandHandler(
         {
             return new Error(
                 SharedErrorConstants.InvalidOperationTitle,
-                "The CPF is already in use.");
+                "The SSN is already in use.");
         }
 
         var patient = new Patient
@@ -48,6 +48,6 @@ internal sealed class RegisterPatientCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return patient.Id;
     }
 }

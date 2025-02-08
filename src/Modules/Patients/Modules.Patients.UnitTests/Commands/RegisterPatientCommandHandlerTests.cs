@@ -55,13 +55,12 @@ namespace Modules.Patients.UnitTests.Commands
 
             result.Error.Should().BeOfType<Error>();
             var error = result.Error;
-            error?.Message.Should().Be("The CPF is already in use.");
+            error?.Message.Should().Be("The SSN is already in use.");
         }
 
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenPatientIsRegistered()
         {
-
             var command = new RegisterPatientCommand("name", "45454545", "patient@exemple.com", "password");
 
             _mockPatientRepository.Setup(repo => repo.ExistsWithEmail(command.Email)).Returns(false);
@@ -70,7 +69,8 @@ namespace Modules.Patients.UnitTests.Commands
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
-            result.Should().BeOfType<Result>();
+            result.Should().BeOfType<Result<Guid>>();
+            result.IsSuccess.Should().BeTrue();
             _mockPatientRepository.Verify(repo => repo.Add(It.IsAny<Patient>()), Times.Once);
             _mockUnitOfWork.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Once);
         }

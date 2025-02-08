@@ -5,28 +5,28 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Modules.Patients.Persistence;
+using Modules.Doctors.Persistence;
 
 #nullable disable
 
-namespace Modules.Patients.Persistence.Migrations
+namespace Modules.Doctors.Persistence.Migrations
 {
-    [DbContext(typeof(PatientsDbContext))]
-    [Migration("20250208021914_Create_PatientAppointments_Table")]
-    partial class Create_PatientAppointments_Table
+    [DbContext(typeof(DoctorsDbContext))]
+    [Migration("20250208105707_Create_DoctorsShiftsAppointments_Table")]
+    partial class Create_DoctorsShiftsAppointments_Table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("patients")
+                .HasDefaultSchema("doctors")
                 .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Modules.Patients.Domain.Entities.Patient", b =>
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,6 +57,12 @@ namespace Modules.Patients.Persistence.Migrations
                         .HasMaxLength(97)
                         .HasColumnType("nvarchar(97)");
 
+                    b.Property<int>("RegistrationNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Specialty")
+                        .HasColumnType("int");
+
                     b.Property<string>("Ssn")
                         .IsRequired()
                         .HasMaxLength(11)
@@ -69,16 +75,13 @@ namespace Modules.Patients.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("RegistrationNumber")
                         .IsUnique();
 
-                    b.HasIndex("Ssn")
-                        .IsUnique();
-
-                    b.ToTable("Patients", "patients");
+                    b.ToTable("Doctors", "doctors");
                 });
 
-            modelBuilder.Entity("Modules.Patients.Domain.Entities.PatientAppointment", b =>
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,13 +95,13 @@ namespace Modules.Patients.Persistence.Migrations
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("EndAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("StartAt")
                         .HasColumnType("datetime2");
@@ -110,23 +113,80 @@ namespace Modules.Patients.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("DoctorId");
 
-                    b.ToTable("PatientAppointments", "patients");
+                    b.ToTable("DoctorsShifts", "doctors");
                 });
 
-            modelBuilder.Entity("Modules.Patients.Domain.Entities.PatientAppointment", b =>
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", b =>
                 {
-                    b.HasOne("Modules.Patients.Domain.Entities.Patient", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("PatientId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<Guid>("DoctorShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorShiftId")
+                        .IsUnique();
+
+                    b.HasIndex("DoctorShiftId", "PatientId")
+                        .IsUnique();
+
+                    b.ToTable("DoctorsShiftsAppointments", "doctors");
+                });
+
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
+                {
+                    b.HasOne("Modules.Doctors.Domain.Entities.Doctor", "Doctor")
+                        .WithMany("Shifts")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Doctor");
                 });
 
-            modelBuilder.Entity("Modules.Patients.Domain.Entities.Patient", b =>
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", b =>
                 {
-                    b.Navigation("Appointments");
+                    b.HasOne("Modules.Doctors.Domain.Entities.DoctorShift", null)
+                        .WithOne("Appointment")
+                        .HasForeignKey("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", "DoctorShiftId");
+                });
+
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.Doctor", b =>
+                {
+                    b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
+                {
+                    b.Navigation("Appointment");
                 });
 #pragma warning restore 612, 618
         }

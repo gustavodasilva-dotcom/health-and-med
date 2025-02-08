@@ -12,13 +12,13 @@ internal sealed class CreateShiftCommandHandler(
     IDoctorRepository doctorRepository,
     IDoctorShiftRepository doctorShiftRepository,
     IDoctorsUnitOfWork unitOfWork) :
-    IRequestHandler<CreateShiftCommand, Result>
+    IRequestHandler<CreateShiftCommand, Result<Guid>>
 {
     private readonly IDoctorRepository _doctorRepository = doctorRepository;
     private readonly IDoctorShiftRepository _doctorShiftRepository = doctorShiftRepository;
     private readonly IDoctorsUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result> Handle(
+    public async Task<Result<Guid>> Handle(
         CreateShiftCommand request,
         CancellationToken cancellationToken)
     {
@@ -49,6 +49,6 @@ internal sealed class CreateShiftCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return shift.Id;
     }
 }

@@ -17,6 +17,7 @@ internal sealed class DoctorShiftRepository(DoctorsDbContext dbContext) :
     public override DoctorShift? GetById(Guid id)
         => DbContext.DoctorsShifts
             .Include(shift => shift.Doctor)
+            .Include(shift => shift.Appointment)
             .SingleOrDefault(shift => shift.Id == id);
 
     public override IEnumerable<DoctorShift> Get(Expression<Func<DoctorShift, bool>> filter)

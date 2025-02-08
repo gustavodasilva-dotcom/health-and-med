@@ -5,6 +5,8 @@ namespace Modules.Doctors.Endpoints.Doctors;
 
 internal sealed class GetDoctorsResponse
 {
+    public required Guid DoctorId { get; init; }
+
     public required string Name { get; init; }
 
     [JsonPropertyName("registration_number")]

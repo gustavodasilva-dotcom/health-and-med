@@ -6,6 +6,8 @@ public sealed class DoctorShift : BaseEntity
 {
     private readonly Doctor? _doctor = null;
 
+    private DoctorShiftAppointment? _appointment = null;
+
     public Guid DoctorId { get; private set; }
 
     public required DateTime StartAt { get; set; }
@@ -24,10 +26,16 @@ public sealed class DoctorShift : BaseEntity
         }
     }
 
+    public DoctorShiftAppointment? Appointment
+        => _appointment;
+
     public void Update(DateTime startAt, DateTime endAt)
     {
         StartAt = startAt;
         EndAt = endAt;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    public void AddAppointment(DoctorShiftAppointment appointment)
+        => _appointment = appointment;
 }

@@ -3,27 +3,30 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Modules.Doctors.Persistence;
+using Modules.Patients.Persistence;
 
 #nullable disable
 
-namespace Modules.Doctors.Persistence.Migrations
+namespace Modules.Patients.Persistence.Migrations
 {
-    [DbContext(typeof(DoctorsDbContext))]
-    partial class DoctorsDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PatientsDbContext))]
+    [Migration("20250208113135_Create_PatientsAppointments_Table")]
+    partial class Create_PatientsAppointments_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("doctors")
+                .HasDefaultSchema("patients")
                 .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.Doctor", b =>
+            modelBuilder.Entity("Modules.Patients.Domain.Entities.Patient", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,12 +57,6 @@ namespace Modules.Doctors.Persistence.Migrations
                         .HasMaxLength(97)
                         .HasColumnType("nvarchar(97)");
 
-                    b.Property<int>("RegistrationNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Specialty")
-                        .HasColumnType("int");
-
                     b.Property<string>("Ssn")
                         .IsRequired()
                         .HasMaxLength(11)
@@ -72,54 +69,38 @@ namespace Modules.Doctors.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RegistrationNumber")
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Doctors", "doctors");
+                    b.HasIndex("Ssn")
+                        .IsUnique();
+
+                    b.ToTable("Patients", "patients");
                 });
 
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
+            modelBuilder.Entity("Modules.Patients.Domain.Entities.PatientAppointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EndAt")
+                    b.Property<DateTime?>("AcceptedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                    b.Property<string>("AnalysisMessage")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("StartAt")
+                    b.Property<decimal?>("AppointmentPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CancellationMotive")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("CancelledAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.ToTable("DoctorsShifts", "doctors");
-                });
-
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -149,41 +130,25 @@ namespace Modules.Doctors.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorShiftId")
-                        .IsUnique();
+                    b.HasIndex("PatientId");
 
-                    b.HasIndex("DoctorShiftId", "PatientId")
-                        .IsUnique();
-
-                    b.ToTable("DoctorsShiftsAppointments", "doctors");
+                    b.ToTable("PatientsAppointments", "patients");
                 });
 
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
+            modelBuilder.Entity("Modules.Patients.Domain.Entities.PatientAppointment", b =>
                 {
-                    b.HasOne("Modules.Doctors.Domain.Entities.Doctor", "Doctor")
-                        .WithMany("Shifts")
-                        .HasForeignKey("DoctorId")
+                    b.HasOne("Modules.Patients.Domain.Entities.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Doctor");
+                    b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", b =>
+            modelBuilder.Entity("Modules.Patients.Domain.Entities.Patient", b =>
                 {
-                    b.HasOne("Modules.Doctors.Domain.Entities.DoctorShift", null)
-                        .WithOne("Appointment")
-                        .HasForeignKey("Modules.Doctors.Domain.Entities.DoctorShiftAppointment", "DoctorShiftId");
-                });
-
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.Doctor", b =>
-                {
-                    b.Navigation("Shifts");
-                });
-
-            modelBuilder.Entity("Modules.Doctors.Domain.Entities.DoctorShift", b =>
-                {
-                    b.Navigation("Appointment");
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }

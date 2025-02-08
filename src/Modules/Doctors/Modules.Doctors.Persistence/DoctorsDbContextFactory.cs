@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Modules.Patients.Persistence;
+namespace Modules.Doctors.Persistence;
 
-public class PatientsDbContextFactory : IDesignTimeDbContextFactory<PatientsDbContext>
+public class DoctorsDbContextFactory : IDesignTimeDbContextFactory<DoctorsDbContext>
 {
-    PatientsDbContext IDesignTimeDbContextFactory<PatientsDbContext>.CreateDbContext(string[] args)
+    DoctorsDbContext IDesignTimeDbContextFactory<DoctorsDbContext>.CreateDbContext(string[] args)
     {
         var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -19,7 +19,7 @@ public class PatientsDbContextFactory : IDesignTimeDbContextFactory<PatientsDbCo
             .AddEnvironmentVariables()
             .Build();
 
-        var optionsBuilder = new DbContextOptionsBuilder<PatientsDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<DoctorsDbContext>();
         var connectionString = configuration.GetConnectionString("Default");
 
         optionsBuilder.UseSqlServer(connectionString);
@@ -33,6 +33,6 @@ public class PatientsDbContextFactory : IDesignTimeDbContextFactory<PatientsDbCo
 
         var publisher = serviceProvider.GetRequiredService<IPublisher>();
 
-        return new PatientsDbContext(publisher, optionsBuilder.Options);
+        return new DoctorsDbContext(publisher, optionsBuilder.Options);
     }
 }

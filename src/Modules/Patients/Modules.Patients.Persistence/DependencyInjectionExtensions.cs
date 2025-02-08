@@ -1,9 +1,11 @@
 using Common.Shared.Extensions;
+using Common.Shared.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Patients.Domain.Abstractions;
+using Modules.Patients.Domain.Entities;
 using Modules.Patients.Persistence.Constants;
 using Modules.Patients.Persistence.Repositories;
 
@@ -23,7 +25,9 @@ public static class DependencyInjectionsExtensions
                         PersistenceConstants.DefaultSchema)))
             .AddScoped<IPatientsUnitOfWork, PatientsUnitOfWork>()
             .AddScoped<IPatientRepository, PatientRepository>()
-            .AddScoped<IPatientAppointmentRepository, PatientAppointmentRepository>();
+            .AddScoped<
+                IRepository<PatientAppointment>,
+                Repository<PatientsDbContext, PatientAppointment>>();
 
     public static void UsePersistence(this IApplicationBuilder app)
         => app.ApplyMigrations<PatientsDbContext>();

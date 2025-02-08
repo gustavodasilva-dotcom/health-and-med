@@ -1,68 +1,69 @@
-﻿using Modules.Patients.Application.Appointments.Queries.GetAppointmentsByPatientId;
-using Modules.Patients.Domain.Abstractions;
+﻿using Common.Shared.Repositories;
+using Modules.Patients.Application.Appointments.Queries.GetAppointmentsByPatientId;
 using Modules.Patients.Domain.Entities;
 using Moq;
 using System.Linq.Expressions;
 
-namespace Modules.Patients.UnitTests.Queries
+namespace Modules.Patients.UnitTests.Queries;
+
+public class GetAppointmentsByPatientIdQueryTests
 {
-    public class GetAppointmentsByPatientIdQueryTests
+    private readonly Mock<IRepository<PatientAppointment>> _mockPatientAppointmentRepository;
+    private readonly GetAppointmentsByPatientIdQueryHandler _handler;
+
+    public GetAppointmentsByPatientIdQueryTests()
     {
-        private readonly Mock<IPatientAppointmentRepository> _mockPatientAppointmentRepository;
-        private readonly GetAppointmentsByPatientIdQueryHandler _handler;
+        _mockPatientAppointmentRepository = new Mock<IRepository<PatientAppointment>>();
+        _handler = new GetAppointmentsByPatientIdQueryHandler(_mockPatientAppointmentRepository.Object);
+    }
 
-        public GetAppointmentsByPatientIdQueryTests()
-        {
-            _mockPatientAppointmentRepository = new Mock<IPatientAppointmentRepository>();
-            _handler = new GetAppointmentsByPatientIdQueryHandler(_mockPatientAppointmentRepository.Object);
-        }
-
-        [Fact]
-        public async Task Handle_WhenAppointmentsExistInRange_ReturnsAppointments()
-        {
-            var patientId = Guid.NewGuid();
-
-            IEnumerable<PatientAppointment> shifts =
-            [
-                new()
+    [Fact]
+    public async Task Handle_WhenAppointmentsExist_ReturnsAppointments()
+    {
+        // Arrange
+        IEnumerable<PatientAppointment> shifts =
+        [
+            new()
             {
-                StartAt = DateTime.Now
+                DoctorShiftId = Guid.NewGuid()
             },
             new()
             {
-                StartAt = DateTime.Now.AddHours(2)
+                DoctorShiftId = Guid.NewGuid()
             }
-            ];
+        ];
 
-            _mockPatientAppointmentRepository
-                .Setup(repo => repo.Get(It.IsAny<Expression<Func<PatientAppointment, bool>>>()))
-                .Returns(shifts);
+        _mockPatientAppointmentRepository
+            .Setup(repo => repo.Get(It.IsAny<Expression<Func<PatientAppointment, bool>>>()))
+            .Returns(shifts);
 
-            var result = await _handler.Handle(
-                new GetAppointmentsByPatientIdQuery(patientId),
-                CancellationToken.None);
+        // Act
+        var result = await _handler.Handle(
+            new GetAppointmentsByPatientIdQuery(PatientId: Guid.NewGuid()),
+            CancellationToken.None);
 
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count());
-        }
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
+    }
 
-        [Fact]
-        public async Task Handle_WhenNoShiftsExistInRange_ReturnsEmptyList()
-        {
-            var patientId = Guid.NewGuid();
+    [Fact]
+    public async Task Handle_WhenAppointmentsDontExist_ReturnsEmptyList()
+    {
+        // Arrange
+        IEnumerable<PatientAppointment> shifts = [];
 
-            IEnumerable<PatientAppointment> shifts = [];
+        _mockPatientAppointmentRepository
+            .Setup(repo => repo.Get(It.IsAny<Expression<Func<PatientAppointment, bool>>>()))
+            .Returns(shifts);
 
-            _mockPatientAppointmentRepository
-                .Setup(repo => repo.Get(It.IsAny<Expression<Func<PatientAppointment, bool>>>()))
-                .Returns(shifts);
+        // Act
+        var result = await _handler.Handle(
+            new GetAppointmentsByPatientIdQuery(PatientId: Guid.NewGuid()),
+            CancellationToken.None);
 
-            var result = await _handler.Handle(
-                new GetAppointmentsByPatientIdQuery(patientId),
-                CancellationToken.None);
-
-            Assert.NotNull(result);
-            Assert.Empty(result);
-        }
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
     }
 }

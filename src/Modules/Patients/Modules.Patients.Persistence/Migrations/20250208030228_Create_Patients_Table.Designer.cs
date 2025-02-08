@@ -12,8 +12,8 @@ using Modules.Patients.Persistence;
 namespace Modules.Patients.Persistence.Migrations
 {
     [DbContext(typeof(PatientsDbContext))]
-    [Migration("20250207152602_Create_Patients_Tables")]
-    partial class Create_Patients_Tables
+    [Migration("20250208030228_Create_Patients_Table")]
+    partial class Create_Patients_Table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

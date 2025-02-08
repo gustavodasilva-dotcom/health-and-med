@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Modules.Patients.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Create_Patients_Tables : Migration
+    public partial class Create_Patients_Table : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

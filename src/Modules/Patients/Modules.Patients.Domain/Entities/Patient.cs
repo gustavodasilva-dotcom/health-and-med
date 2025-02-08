@@ -1,4 +1,5 @@
 using Common.Shared.Abstractions;
+using Modules.Patients.Domain.DomainEvents;
 
 namespace Modules.Patients.Domain.Entities;
 
@@ -14,7 +15,8 @@ public sealed class Patient : UserEntity
 
     public override IEnumerable<object> GetAtomicValues() => [Ssn];
 
-    public IReadOnlySet<PatientAppointment> Appointments => _appointments;
+    public IReadOnlySet<PatientAppointment> Appointments
+        => _appointments;
 
     public void Update(string name, string cpf, string email)
     {
@@ -25,5 +27,11 @@ public sealed class Patient : UserEntity
     }
 
     public void AddAppointment(PatientAppointment appointment)
-        => _appointments.Add(appointment);
+    {
+        _appointments.Add(appointment);
+
+        RaiseDomainEvent(
+            new AppointmentCreatedDomainEvent(
+                Id, appointment.DoctorShiftId));
+    }
 }
