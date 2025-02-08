@@ -1,6 +1,7 @@
 ﻿using Common.Shared;
 using Common.Shared.Abstractions;
 using Common.Shared.Constants;
+using Modules.Patients.Domain.DomainEvents;
 using Modules.Patients.Domain.Enums;
 
 namespace Modules.Patients.Domain.Entities;
@@ -35,6 +36,24 @@ public sealed class PatientAppointment : BaseEntity
             ArgumentNullException.ThrowIfNull(_patient);
             return _patient;
         }
+    }
+
+    public Result CancelAppointment(string motive)
+    {
+        if (Status == AppointmentStatus.Cancelled)
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                "Appointment is already cancelled.");
+        }
+
+        Status = AppointmentStatus.Cancelled;
+        CancelledAt = DateTime.UtcNow;
+        CancellationMotive = motive.Trim();
+
+        RaiseDomainEvent(new AppointmentCancelledDomainEvent(DoctorShiftId));
+
+        return Result.Success();
     }
 
     public Result DenyBySystem(string message)

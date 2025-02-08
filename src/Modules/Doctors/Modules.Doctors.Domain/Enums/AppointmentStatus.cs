@@ -9,5 +9,7 @@ public enum AppointmentStatus
 
     Accepted = 2,
 
-    Denied = 3
+    Denied = 3,
+
+    Cancelled = 4
 }
