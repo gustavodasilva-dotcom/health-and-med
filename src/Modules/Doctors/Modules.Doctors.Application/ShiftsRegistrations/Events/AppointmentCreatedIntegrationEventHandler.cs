@@ -15,7 +15,8 @@ public class AppointmentCreatedIntegrationEventHandler(
     IConsumer<AppointmentCreatedIntegrationEvent>
 {
     private readonly IDoctorShiftRepository _doctorShiftRepository = doctorShiftRepository;
-    private readonly IRepository<DoctorShiftAppointment> _doctorShiftAppointmentRepository = doctorShiftAppointmentRepository;
+    private readonly IRepository<DoctorShiftAppointment> _doctorShiftAppointmentRepository
+        = doctorShiftAppointmentRepository;
     private readonly IDoctorsUnitOfWork _unitOfWork = unitOfWork;
 
     public Task Consume(

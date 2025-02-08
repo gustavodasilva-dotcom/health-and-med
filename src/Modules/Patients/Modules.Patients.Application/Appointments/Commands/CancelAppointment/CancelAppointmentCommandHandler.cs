@@ -1,4 +1,4 @@
-﻿using Common.Shared;
+using Common.Shared;
 using Common.Shared.Constants;
 using Common.Shared.Repositories;
 using MediatR;
@@ -7,41 +7,35 @@ using Modules.Patients.Application.Constants;
 using Modules.Patients.Domain.Abstractions;
 using Modules.Patients.Domain.Entities;
 
-namespace Modules.Patients.Application.Appointments.Commands.CreateAppointment;
+namespace Modules.Patients.Application.Appointments.Commands.CancelAppointment;
 
-internal sealed class CreateAppointmentCommandHandler(
-    IPatientRepository patientRepository,
+internal sealed class CancelAppointmentCommandHandler(
     IRepository<PatientAppointment> patientAppointmentRepository,
     IPatientsUnitOfWork unitOfWork) :
-    IRequestHandler<CreateAppointmentCommand, Result>
+    IRequestHandler<CancelAppointmentCommand, Result>
 {
-    private readonly IPatientRepository _patientRepository = patientRepository;
     private readonly IRepository<PatientAppointment> _patientAppointmentRepository
         = patientAppointmentRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result> Handle(
-        CreateAppointmentCommand request,
+        CancelAppointmentCommand request,
         CancellationToken cancellationToken)
     {
-        var patient = _patientRepository.GetById(request.PatientId);
-        if (patient is null)
+        var appointment = _patientAppointmentRepository.GetById(request.AppointmentId);
+        if (appointment is null)
         {
             return new Error(
                 SharedErrorConstants.NotFoundTitle,
-                ErrorConstants.PatientNotFound,
+                ErrorConstants.PatientAppointmentNotFound,
                 StatusCodes.Status404NotFound);
         }
 
-        // TODO: Adicionar validação de agenda do médico.
-
-        var appointment = new PatientAppointment
+        var result = appointment.CancelAppointment(request.Motive);
+        if (result.IsFailure)
         {
-            DoctorShiftId = request.DoctorShiftId
-        };
-        patient.AddAppointment(appointment);
-
-        _patientAppointmentRepository.Add(appointment);
+            return result.Error!;
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
