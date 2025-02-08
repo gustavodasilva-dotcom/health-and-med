@@ -12,13 +12,13 @@ internal sealed class RegisterDoctorCommandHandler(
     IPasswordHasher passwordHasher,
     IDoctorRepository doctorRepository,
     IDoctorsUnitOfWork unitOfWork) :
-    IRequestHandler<RegisterDoctorCommand, Result>
+    IRequestHandler<RegisterDoctorCommand, Result<Guid>>
 {
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
     private readonly IDoctorRepository _doctorRepository = doctorRepository;
     private readonly IDoctorsUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result> Handle(
+    public async Task<Result<Guid>> Handle(
         RegisterDoctorCommand request,
         CancellationToken cancellationToken)
     {
@@ -43,6 +43,6 @@ internal sealed class RegisterDoctorCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return doctor.Id;
     }
 }

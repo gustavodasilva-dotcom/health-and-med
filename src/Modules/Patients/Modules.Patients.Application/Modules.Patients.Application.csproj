@@ -7,12 +7,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="MassTransit" />
 		<PackageReference Include="MediatR" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Common\Common.Shared\Common.Shared.csproj" />
 		<ProjectReference Include="..\Modules.Patients.Domain\Modules.Patients.Domain.csproj" />
+		<ProjectReference Include="..\Modules.Patients.IntegrationEvents\Modules.Patients.IntegrationEvents.csproj" />
+		<ProjectReference Include="..\..\Doctors\Modules.Doctors.IntegrationEvents\Modules.Doctors.IntegrationEvents.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

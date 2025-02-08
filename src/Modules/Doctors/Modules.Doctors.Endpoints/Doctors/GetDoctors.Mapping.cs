@@ -15,6 +15,7 @@ public sealed class GetDoctorsMapping : IRegister
             .Map(dest => dest.Specialty, src => src.specialty);
 
         config.NewConfig<Doctor, GetDoctorsResponse>()
+            .Map(dest => dest.DoctorId, src => src.Id)
             .Map(dest => dest.Specialty, src => src.Specialty.ToEnumResponse());
     }
 }
