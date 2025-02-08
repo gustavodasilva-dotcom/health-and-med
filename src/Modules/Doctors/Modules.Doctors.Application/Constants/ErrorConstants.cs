@@ -4,7 +4,7 @@ internal static class ErrorConstants
 {
     public const string RegistrationNumberIsAlreadyInUseMessage = "The doctor's registration number is already in use.";
 
-    public const string ShiftUnavailableMessage = "Shift unavailable.";
+    public const string ShiftUnavailableMessage = "There's already a scheduled shift for this doctor at this specific period.";
 
     public const string ShiftNotFoundMessage = "Shift not found.";
 

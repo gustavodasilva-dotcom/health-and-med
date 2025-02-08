@@ -10,18 +10,20 @@ internal sealed class DoctorShiftRepository(DoctorsDbContext dbContext) :
     Repository<DoctorsDbContext, DoctorShift>(dbContext),
     IDoctorShiftRepository
 {
-    public bool IsShiftAvailable(DateTime startAt, DateTime endAt)
-        => !DbContext.DoctorsShifts
-            .Any(shift => startAt >= shift.StartAt && endAt <= shift.EndAt);
-
     public override DoctorShift? GetById(Guid id)
         => DbContext.DoctorsShifts
             .Include(shift => shift.Doctor)
             .SingleOrDefault(shift => shift.Id == id);
 
-    public override IEnumerable<DoctorShift> Get(Expression<Func<DoctorShift, bool>> filter)
+    public override IEnumerable<DoctorShift> Get(
+        Expression<Func<DoctorShift, bool>> filter)
         => DbContext.DoctorsShifts
             .Include(shift => shift.Doctor)
             .AsSplitQuery()
             .Where(filter);
+
+    public bool IsShiftAvailableForDoctor(Guid doctorId, DateTime startAt, DateTime endAt)
+        => !DbContext.DoctorsShifts.Any(shift =>
+            shift.DoctorId == doctorId &&
+            startAt >= shift.StartAt && endAt <= shift.EndAt);
 }

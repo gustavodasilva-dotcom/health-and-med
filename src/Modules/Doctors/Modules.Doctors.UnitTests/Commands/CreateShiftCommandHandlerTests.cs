@@ -3,9 +3,10 @@ using FluentAssertions;
 using Modules.Doctors.Application.Shifts.Commands.CreateShift;
 using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
+using Modules.Doctors.Domain.Enums;
 using Modules.Doctors.Domain.Entities;
 using Moq;
-using Modules.Doctors.Domain.Enums;
+using Common.Shared.Helpers;
 
 namespace Modules.Doctors.UnitTests.Commands;
 
@@ -34,12 +35,12 @@ public class CreateShiftCommandHandlerTests
         // Arrange
         var doctor = new Doctor
         {
-            Name = "doctor",
-            Ssn = "123456",
+            Name = StringHelpers.GenerateRandomString(),
+            Ssn = StringHelpers.GenerateRandomString(),
             RegistrationNumber = 123456,
             Specialty = MedicalSpecialties.GeneralPhysician,
-            Email = "doctor@example.com",
-            Password = "hashedPassword",
+            Email = StringHelpers.GenerateRandomString(),
+            Password = StringHelpers.GenerateRandomString()
         };
 
         var request = new CreateShiftCommand(
@@ -48,11 +49,12 @@ public class CreateShiftCommandHandlerTests
             EndAt: DateTime.UtcNow.AddHours(1));
 
         _mockDoctorRepository
-            .Setup(repo => repo.GetById(request.DoctorId))
+            .Setup(repo => repo.GetById(It.IsAny<Guid>()))
             .Returns(doctor);
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
+            .Setup(repo => repo.IsShiftAvailableForDoctor(
+                It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
             .Returns(false);
 
         // Act
@@ -71,12 +73,12 @@ public class CreateShiftCommandHandlerTests
         // Arrange
         var doctor = new Doctor
         {
-            Name = "doctor",
-            Ssn = "123456",
+            Name = StringHelpers.GenerateRandomString(),
+            Ssn = StringHelpers.GenerateRandomString(),
             RegistrationNumber = 123456,
             Specialty = MedicalSpecialties.GeneralPhysician,
-            Email = "doctor@example.com",
-            Password = "hashedPassword"
+            Email = StringHelpers.GenerateRandomString(),
+            Password = StringHelpers.GenerateRandomString()
         };
 
         var request = new CreateShiftCommand(
@@ -91,11 +93,12 @@ public class CreateShiftCommandHandlerTests
         };
 
         _mockDoctorRepository
-            .Setup(repo => repo.GetById(request.DoctorId))
+            .Setup(repo => repo.GetById(It.IsAny<Guid>()))
             .Returns(doctor);
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
+            .Setup(repo => repo.IsShiftAvailableForDoctor(
+                It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
             .Returns(true);
 
         _mockDoctorShiftRepository

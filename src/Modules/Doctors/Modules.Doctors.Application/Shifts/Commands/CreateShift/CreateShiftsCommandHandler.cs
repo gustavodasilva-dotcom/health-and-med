@@ -22,7 +22,9 @@ internal sealed class CreateShiftCommandHandler(
         CreateShiftCommand request,
         CancellationToken cancellationToken)
     {
-        var doctor = _doctorRepository.GetById(request.DoctorId);
+        request.Deconstruct(out Guid doctorId, out DateTime startAt, out DateTime endAt);
+
+        var doctor = _doctorRepository.GetById(doctorId);
         if (doctor is null)
         {
             return new Error(
@@ -31,11 +33,12 @@ internal sealed class CreateShiftCommandHandler(
                 StatusCodes.Status404NotFound);
         }
 
-        if (!_doctorShiftRepository.IsShiftAvailable(request.StartAt, request.EndAt))
+        if (!_doctorShiftRepository.IsShiftAvailableForDoctor(doctorId, startAt, endAt))
         {
             return new Error(
                 SharedErrorConstants.InvalidOperationTitle,
-                ErrorConstants.ShiftUnavailableMessage);
+                ErrorConstants.ShiftUnavailableMessage,
+                StatusCodes.Status409Conflict);
         }
 
         var shift = new DoctorShift
