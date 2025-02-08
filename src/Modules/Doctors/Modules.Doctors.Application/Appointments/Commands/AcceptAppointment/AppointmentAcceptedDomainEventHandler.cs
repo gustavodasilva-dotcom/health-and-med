@@ -16,6 +16,7 @@ internal sealed class AppointmentAcceptedDomainEventHandler(IPublishEndpoint pub
         => _publishEndpoint.Publish(new AppointmentAcceptedByDoctorIntegrationEvent
         {
             PatientId = notification.PatientId,
-            DoctorShiftId = notification.DoctorShiftId
+            DoctorShiftId = notification.DoctorShiftId,
+            AppointmentPrice = notification.AppointmentPrice
         }, cancellationToken);
 }
