@@ -29,10 +29,10 @@ data:
         "IsSecure": false
       },
         "Jwt": {
-        "Secret": "healthandmed",
+        "Secret": "healthandmedhackthonfiap2025apihealthandmed",
         "ExpirationInMinutes": 300,
-        "Issuer": "healthandmed",
-        "Audience": "healthandmed"
+        "Issuer": "healthandmedhackthonfiap2025apihealthandmed",
+        "Audience": "healthandmedhackthonfiap2025apihealthandmed"
       },
       "Logging": {
         "LogLevel": {
