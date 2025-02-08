@@ -7,19 +7,19 @@ using Modules.Patients.Domain.Enums;
 
 namespace Modules.Patients.Application.AppointmentsRegistrations.Events;
 
-public sealed class AppointmentDeniedByDoctorIntegrationEventHandler(
+public sealed class AppointmentAcceptedByDoctorIntegrationEventHandler(
     IRepository<PatientAppointment> patientAppointmentRepository,
     IPatientsUnitOfWork unitOfWork) :
-    IConsumer<AppointmentDeniedByDoctorIntegrationEvent>
+    IConsumer<AppointmentAcceptedByDoctorIntegrationEvent>
 {
     private readonly IRepository<PatientAppointment> _patientAppointmentRepository
         = patientAppointmentRepository;
     private readonly IPatientsUnitOfWork _unitOfWork = unitOfWork;
 
     public Task Consume(
-        ConsumeContext<AppointmentDeniedByDoctorIntegrationEvent> context)
+        ConsumeContext<AppointmentAcceptedByDoctorIntegrationEvent> context)
     {
-        AppointmentDeniedByDoctorIntegrationEvent message = context.Message;
+        AppointmentAcceptedByDoctorIntegrationEvent message = context.Message;
 
         var appointments = _patientAppointmentRepository.Get(app =>
             app.PatientId == message.PatientId && app.DoctorShiftId == message.DoctorShiftId);
@@ -41,7 +41,7 @@ public sealed class AppointmentDeniedByDoctorIntegrationEventHandler(
         }
 #pragma warning restore IDE0270 // Use coalesce expression
 
-        var result = pendingAppointment.DenyByDoctor();
+        var result = pendingAppointment.AcceptByDoctor();
         if (result.IsFailure)
         {
             throw new InvalidOperationException(result.Error!.Message);
