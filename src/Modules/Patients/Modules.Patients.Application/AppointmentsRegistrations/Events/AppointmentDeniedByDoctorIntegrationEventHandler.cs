@@ -7,7 +7,7 @@ using Modules.Patients.Domain.Enums;
 
 namespace Modules.Patients.Application.AppointmentsRegistrations.Events;
 
-internal sealed class AppointmentDeniedByDoctorIntegrationEventHandler(
+public sealed class AppointmentDeniedByDoctorIntegrationEventHandler(
     IRepository<PatientAppointment> patientAppointmentRepository,
     IPatientsUnitOfWork unitOfWork) :
     IConsumer<AppointmentDeniedByDoctorIntegrationEvent>
