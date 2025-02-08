@@ -12,7 +12,8 @@ public class AppointmentDeniedBySystemIntegrationEventHandler(
     IPatientsUnitOfWork unitOfWork) :
     IConsumer<AppointmentDeniedBySystemIntegrationEvent>
 {
-    private readonly IRepository<PatientAppointment> _patientAppointmentRepository = patientAppointmentRepository;
+    private readonly IRepository<PatientAppointment> _patientAppointmentRepository
+        = patientAppointmentRepository;
     private readonly IPatientsUnitOfWork _unitOfWork = unitOfWork;
 
     public Task Consume(

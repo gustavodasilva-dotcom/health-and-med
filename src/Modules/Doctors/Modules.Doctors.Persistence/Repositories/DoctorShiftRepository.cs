@@ -20,6 +20,7 @@ internal sealed class DoctorShiftRepository(DoctorsDbContext dbContext) :
         Expression<Func<DoctorShift, bool>> filter)
         => DbContext.DoctorsShifts
             .Include(shift => shift.Doctor)
+            .Include(shift => shift.Appointment)
             .AsSplitQuery()
             .Where(filter);
 

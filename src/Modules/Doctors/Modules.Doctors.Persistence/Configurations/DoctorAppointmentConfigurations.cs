@@ -16,7 +16,7 @@ internal sealed class DoctorShiftAppointmentConfigurations
 
         builder
             .Property(p => p.Status)
-            .HasDefaultValue(AppointmentStatus.WaitingOnDoctorsAnalysis);
+            .HasDefaultValue(AppointmentStatus.PendingDoctorAnalysis);
 
         builder
             .HasIndex(p => new

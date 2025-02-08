@@ -7,6 +7,8 @@ internal static class ShiftsRoutes
     public const string GetShifts = "api/doctors/shifts/{from:datetime}/{to:datetime}";
     
     public const string GetShiftById = "api/doctors/shifts/{id:guid}";
+
+    public const string GetShiftsByDoctor = "api/doctors/{doctorId:guid}/shifts";
     
     public const string CreateShift = "api/doctors/shifts";
     

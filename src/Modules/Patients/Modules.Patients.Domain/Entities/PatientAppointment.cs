@@ -40,4 +40,9 @@ public sealed class PatientAppointment : BaseEntity
         Status = status;
         AnalysisMessage = message.Trim();
     }
+
+    public void DenyByDoctor()
+    {
+        Status = AppointmentStatus.AppointmentDeniedByDoctor;
+    }
 }
