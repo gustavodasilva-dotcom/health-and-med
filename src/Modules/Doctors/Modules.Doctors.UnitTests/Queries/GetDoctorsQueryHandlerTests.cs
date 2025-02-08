@@ -63,6 +63,7 @@ public class GetDoctorsQueryHandlerTests
             }
         ];
 
+    [Fact]
     public async Task Handle_WhenDoctorsExistsBySpecialty_ReturnsDoctors()
     {
         // Arrange
@@ -87,6 +88,7 @@ public class GetDoctorsQueryHandlerTests
         neurologistCount.Should().BeGreaterThan(0);
     }
 
+    [Fact]
     public async Task Handle_WhenDoctorsDontExistBySpecialty_ReturnsEmpty()
     {
         // Arrange
