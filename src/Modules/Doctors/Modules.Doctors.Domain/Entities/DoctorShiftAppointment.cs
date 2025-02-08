@@ -33,7 +33,7 @@ public sealed class DoctorShiftAppointment : BaseEntity
         return Result.Success();
     }
 
-    public Result AcceptAppointment()
+    public Result AcceptAppointment(decimal appointmentPrice)
     {
         if (Status != AppointmentStatus.PendingDoctorAnalysis)
         {
@@ -44,7 +44,12 @@ public sealed class DoctorShiftAppointment : BaseEntity
 
         Status = AppointmentStatus.Accepted;
 
-        RaiseDomainEvent(new AppointmentAcceptedDomainEvent(PatientId, DoctorShiftId));
+        RaiseDomainEvent(new AppointmentAcceptedDomainEvent
+        {
+            PatientId = PatientId,
+            DoctorShiftId = DoctorShiftId,
+            AppointmentPrice = appointmentPrice
+        });
 
         return Result.Success();
     }

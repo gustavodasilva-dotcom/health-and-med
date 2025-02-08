@@ -85,7 +85,7 @@ public sealed class PatientAppointment : BaseEntity
         return Result.Success();
     }
 
-    public Result AcceptByDoctor()
+    public Result AcceptByDoctor(decimal appointmentPrice)
     {
         if (Status != AppointmentStatus.Pending)
         {
@@ -95,6 +95,7 @@ public sealed class PatientAppointment : BaseEntity
         }
 
         Status = AppointmentStatus.AcceptedByDoctor;
+        AppointmentPrice = appointmentPrice;
         AcceptedAt = DateTime.UtcNow;
 
         return Result.Success();

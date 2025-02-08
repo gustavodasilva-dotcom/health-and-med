@@ -41,7 +41,7 @@ public sealed class AppointmentAcceptedByDoctorIntegrationEventHandler(
         }
 #pragma warning restore IDE0270 // Use coalesce expression
 
-        var result = pendingAppointment.AcceptByDoctor();
+        var result = pendingAppointment.AcceptByDoctor(message.AppointmentPrice);
         if (result.IsFailure)
         {
             throw new InvalidOperationException(result.Error!.Message);
