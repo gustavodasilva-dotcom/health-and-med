@@ -1,6 +1,7 @@
 ﻿using Common.Shared;
 using Common.Shared.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Modules.Doctors.Application.Constants;
 using Modules.Doctors.Domain.Abstractions;
 using Modules.Doctors.Domain.Entities;
@@ -19,22 +20,27 @@ internal sealed class UpdateShiftCommandHandler(
         UpdateShiftCommand request,
         CancellationToken cancellationToken)
     {
-        if (!_doctorShiftRepository.IsShiftAvailable(request.StartAt, request.EndAt))
-        {
-            return new Error(
-                SharedErrorConstants.InvalidOperationTitle,
-                ErrorConstants.ShiftUnavailableMessage);
-        }
+        request.Deconstruct(out Guid shiftId, out DateTime startAt, out DateTime endAt);
 
-        var shift = _doctorShiftRepository.GetById(request.Id);
+        var shift = _doctorShiftRepository.GetById(shiftId);
         if (shift is null)
         {
             return new Error(
                 SharedErrorConstants.NotFoundTitle,
-                ErrorConstants.ShiftNotFoundMessage);
+                ErrorConstants.ShiftNotFoundMessage,
+                StatusCodes.Status400BadRequest);
         }
 
-        shift.Update(request.StartAt, request.EndAt);
+        
+        if (!_doctorShiftRepository.IsShiftAvailableForDoctor(shift.DoctorId, startAt, endAt))
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                ErrorConstants.ShiftUnavailableMessage,
+                StatusCodes.Status409Conflict);
+        }
+
+        shift.Update(startAt, endAt);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

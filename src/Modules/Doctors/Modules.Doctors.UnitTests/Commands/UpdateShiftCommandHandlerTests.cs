@@ -1,9 +1,9 @@
 ﻿using Common.Shared;
 using FluentAssertions;
-using Modules.Doctors.Domain.Abstractions;
-using Modules.Doctors.Domain.Entities;
 using Modules.Doctors.Application.Shifts.Commands.UpdateShift;
 using Modules.Doctors.Application.Constants;
+using Modules.Doctors.Domain.Abstractions;
+using Modules.Doctors.Domain.Entities;
 using Moq;
 
 namespace Modules.Doctors.UnitTests.Commands;
@@ -25,6 +25,12 @@ public class UpdateShiftCommandHandlerTests
     public async Task Handle_WhenDateIsNotFree_ReturnsError()
     {
         // Arrange
+        var existingShift = new DoctorShift
+        {
+            StartAt = DateTime.UtcNow.AddDays(1),
+            EndAt = DateTime.UtcNow.AddDays(1).AddHours(4)
+        };
+
         var request = new UpdateShiftCommand(
             Id: Guid.NewGuid(),
             StartAt: DateTime.UtcNow,
@@ -32,7 +38,12 @@ public class UpdateShiftCommandHandlerTests
         );
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
+            .Setup(repo => repo.GetById(It.IsAny<Guid>()))
+            .Returns(existingShift);
+
+        _mockDoctorShiftRepository
+            .Setup(repo => repo.IsShiftAvailableForDoctor(
+                It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
             .Returns(false);
 
         // Act
@@ -56,12 +67,13 @@ public class UpdateShiftCommandHandlerTests
         );
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
+            .Setup(repo => repo.IsShiftAvailableForDoctor(
+                It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
             .Returns(true);
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.GetById(request.Id))
-                .Returns((DoctorShift?)null);
+            .Setup(repo => repo.GetById(It.IsAny<Guid>()))
+            .Returns((DoctorShift?)null);
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
@@ -90,12 +102,13 @@ public class UpdateShiftCommandHandlerTests
         );
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.IsShiftAvailable(request.StartAt, request.EndAt))
-            .Returns(true);
+            .Setup(repo => repo.GetById(It.IsAny<Guid>()))
+            .Returns(existingShift);
 
         _mockDoctorShiftRepository
-            .Setup(repo => repo.GetById(request.Id))
-            .Returns(existingShift);
+            .Setup(repo => repo.IsShiftAvailableForDoctor(
+                It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+            .Returns(true);
 
         _mockDoctorShiftRepository
             .Setup(repo => repo.Update(It.IsAny<DoctorShift>()))
