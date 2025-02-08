@@ -20,6 +20,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Common\Common.Shared\Common.Shared.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.Domain\Modules.Doctors.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Doctors\Modules.Doctors.Persistence\Modules.Doctors.Persistence.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.Domain\Modules.Patients.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Patients\Modules.Patients.Persistence\Modules.Patients.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
