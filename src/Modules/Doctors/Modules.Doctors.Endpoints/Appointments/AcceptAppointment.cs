@@ -6,20 +6,20 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Modules.Doctors.Application.Appointments.Commands.DenyAppointment;
+using Modules.Doctors.Application.Appointments.Commands.AcceptAppointment;
 using Modules.Doctors.Endpoints.Routes;
 
 namespace Modules.Doctors.Endpoints.Appointments;
 
-public sealed class DenyAppointment : ICarterModule
+public sealed class AcceptAppointment : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPatch(AppointmentsRoutes.DenyAppointment, async (
+        app.MapPatch(AppointmentsRoutes.AcceptAppointment, async (
             ISender sender,
             [FromRoute] Guid appointmentId) =>
         {
-            var result = await sender.Send(new DenyAppointmentCommand(appointmentId));
+            var result = await sender.Send(new AcceptAppointmentCommand(appointmentId));
             if (result.IsFailure)
             {
                 return Results.BadRequest(result.Error);

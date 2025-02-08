@@ -36,9 +36,11 @@ public class AppointmentDeniedBySystemIntegrationEventHandler(
                 "The appointment should be pending analysis, but was found in a different state.");
         }
 
-        appointment.SetAnalysisResult(
-            status: AppointmentStatus.AppointmentDeniedBySystem,
-            message: message.Motive);
+        var result = appointment.DenyBySystem(message.Motive);
+        if (result.IsFailure)
+        {
+            throw new InvalidOperationException(result.Error!.Message);
+        }
 
         return _unitOfWork.SaveChangesAsync(context.CancellationToken);
     }

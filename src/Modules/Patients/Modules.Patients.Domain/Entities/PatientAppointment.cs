@@ -1,4 +1,6 @@
-﻿using Common.Shared.Abstractions;
+﻿using Common.Shared;
+using Common.Shared.Abstractions;
+using Common.Shared.Constants;
 using Modules.Patients.Domain.Enums;
 
 namespace Modules.Patients.Domain.Entities;
@@ -35,14 +37,47 @@ public sealed class PatientAppointment : BaseEntity
         }
     }
 
-    public void SetAnalysisResult(AppointmentStatus status, string message)
+    public Result DenyBySystem(string message)
     {
-        Status = status;
+        if (Status != AppointmentStatus.Pending)
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                "The patient's appointment should be pending.");
+        }
+
+        Status = AppointmentStatus.AppointmentDeniedBySystem;
         AnalysisMessage = message.Trim();
+
+        return Result.Success();
     }
 
-    public void DenyByDoctor()
+    public Result DenyByDoctor()
     {
+        if (Status != AppointmentStatus.Pending)
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                "The patient's appointment should be pending.");
+        }
+
         Status = AppointmentStatus.AppointmentDeniedByDoctor;
+
+        return Result.Success();
+    }
+
+    public Result AcceptByDoctor()
+    {
+        if (Status != AppointmentStatus.Pending)
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                "The patient's appointment should be pending.");
+        }
+
+        Status = AppointmentStatus.AcceptedByDoctor;
+        AcceptedAt = DateTime.UtcNow;
+
+        return Result.Success();
     }
 }

@@ -32,4 +32,20 @@ public sealed class DoctorShiftAppointment : BaseEntity
 
         return Result.Success();
     }
+
+    public Result AcceptAppointment()
+    {
+        if (Status != AppointmentStatus.PendingDoctorAnalysis)
+        {
+            return new Error(
+                SharedErrorConstants.InvalidOperationTitle,
+                "To be accepted, an appointment needs to be pending the doctor analysis.");
+        }
+
+        Status = AppointmentStatus.Accepted;
+
+        RaiseDomainEvent(new AppointmentAcceptedDomainEvent(PatientId, DoctorShiftId));
+
+        return Result.Success();
+    }
 }
