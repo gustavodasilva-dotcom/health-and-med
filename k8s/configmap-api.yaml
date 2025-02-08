@@ -28,6 +28,12 @@ data:
         "Port": 1025,
         "IsSecure": false
       },
+        "Jwt": {
+        "Secret": "healthandmed",
+        "ExpirationInMinutes": 300,
+        "Issuer": "healthandmed",
+        "Audience": "healthandmed"
+      },
       "Logging": {
         "LogLevel": {
           "Default": "Information",
