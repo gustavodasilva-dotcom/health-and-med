@@ -12,10 +12,8 @@ namespace Modules.Patients.Domain.Entities
 
         public required DateTime StartAt { get; set; }
 
-        public required DateTime EndAt { get; set; }
-
         public override IEnumerable<object> GetAtomicValues()
-            => [PatientId, StartAt, EndAt];
+            => [PatientId, StartAt];
 
         public Patient Patient
         {

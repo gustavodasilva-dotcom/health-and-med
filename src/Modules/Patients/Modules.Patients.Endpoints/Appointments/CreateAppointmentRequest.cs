@@ -12,8 +12,5 @@ namespace Modules.Patients.Endpoints.Appointments
 
         [JsonPropertyName("start_at")]
         public required DateTime StartAt { get; init; }
-
-        [JsonPropertyName("end_at")]
-        public required DateTime EndAt { get; init; }
     }
 }

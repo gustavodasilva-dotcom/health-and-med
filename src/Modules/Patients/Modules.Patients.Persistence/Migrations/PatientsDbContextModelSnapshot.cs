@@ -89,9 +89,6 @@ namespace Modules.Patients.Persistence.Migrations
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")

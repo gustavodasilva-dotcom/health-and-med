@@ -12,7 +12,7 @@ using Modules.Patients.Persistence;
 namespace Modules.Patients.Persistence.Migrations
 {
     [DbContext(typeof(PatientsDbContext))]
-    [Migration("20250207212008_Create_PatientAppointments_Table")]
+    [Migration("20250208021914_Create_PatientAppointments_Table")]
     partial class Create_PatientAppointments_Table
     {
         /// <inheritdoc />
@@ -91,9 +91,6 @@ namespace Modules.Patients.Persistence.Migrations
 
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EndAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

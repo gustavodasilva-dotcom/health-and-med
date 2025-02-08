@@ -32,14 +32,14 @@ namespace Modules.Patients.Application.Appointments.Commands.RegisterAppointment
                     StatusCodes.Status404NotFound);
             }
 
-            if (!_patientAppointmentRepository.IsPatientAvailable(request.PatientId, request.StartAt, request.EndAt))
+            if (!_patientAppointmentRepository.IsPatientAvailable(request.PatientId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
             {
                 return new Error(
                     SharedErrorConstants.InvalidOperationTitle,
                     ErrorConstants.PatientUnavailableMessage);
             }
 
-            if (!_patientAppointmentRepository.IsDoctorAvailable(request.DoctorId, request.StartAt, request.EndAt))
+            if (!_patientAppointmentRepository.IsDoctorAvailable(request.DoctorId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
             {
                 return new Error(
                     SharedErrorConstants.InvalidOperationTitle,
@@ -50,8 +50,7 @@ namespace Modules.Patients.Application.Appointments.Commands.RegisterAppointment
 
             var appointment = new PatientAppointment
             {
-                StartAt = request.StartAt,
-                EndAt = request.EndAt
+                StartAt = request.StartAt
             };
 
             patient.AddAppointment(appointment);

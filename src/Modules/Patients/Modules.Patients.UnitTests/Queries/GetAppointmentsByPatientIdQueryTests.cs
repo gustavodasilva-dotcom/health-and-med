@@ -26,13 +26,11 @@ namespace Modules.Patients.UnitTests.Queries
             [
                 new()
             {
-                StartAt = DateTime.Now,
-                EndAt = DateTime.Now.AddHours(1)
+                StartAt = DateTime.Now
             },
             new()
             {
-                StartAt = DateTime.Now.AddHours(2),
-                EndAt = DateTime.Now.AddHours(3)
+                StartAt = DateTime.Now.AddHours(2)
             }
             ];
 

@@ -43,15 +43,14 @@ namespace Modules.Patients.UnitTests.Commands
             var request = new CreateAppointmentCommand(
                 PatientId: patient.Id,
                 DoctorId: Guid.NewGuid(),
-                StartAt: DateTime.UtcNow,
-                EndAt: DateTime.UtcNow.AddHours(1));
+                StartAt: DateTime.UtcNow);
 
             _mockPatientRepository
                 .Setup(repo => repo.GetById(request.PatientId))
                 .Returns(patient);
 
             _mockPatientAppointmentRepository
-                .Setup(repo => repo.IsPatientAvailable(request.PatientId, request.StartAt, request.EndAt))
+                .Setup(repo => repo.IsPatientAvailable(request.PatientId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
                 .Returns(false);
 
             // Act
@@ -79,19 +78,18 @@ namespace Modules.Patients.UnitTests.Commands
             var request = new CreateAppointmentCommand(
                 PatientId: patient.Id,
                 DoctorId: Guid.NewGuid(),
-                StartAt: DateTime.UtcNow,
-                EndAt: DateTime.UtcNow.AddHours(1));
+                StartAt: DateTime.UtcNow);
 
             _mockPatientRepository
                 .Setup(repo => repo.GetById(request.PatientId))
                 .Returns(patient);
 
             _mockPatientAppointmentRepository
-                .Setup(repo => repo.IsPatientAvailable(request.PatientId, request.StartAt, request.EndAt))
+                .Setup(repo => repo.IsPatientAvailable(request.PatientId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
                 .Returns(true);
 
             _mockPatientAppointmentRepository
-                .Setup(repo => repo.IsDoctorAvailable(request.DoctorId, request.StartAt, request.EndAt))
+                .Setup(repo => repo.IsDoctorAvailable(request.DoctorId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
                 .Returns(false);
 
             // Act
@@ -119,19 +117,18 @@ namespace Modules.Patients.UnitTests.Commands
             var request = new CreateAppointmentCommand(
                 PatientId: patient.Id,
                 DoctorId: Guid.NewGuid(),
-                StartAt: DateTime.UtcNow,
-                EndAt: DateTime.UtcNow.AddHours(1));
+                StartAt: DateTime.UtcNow);
 
             _mockPatientRepository
                 .Setup(repo => repo.GetById(request.PatientId))
                 .Returns(patient);
 
             _mockPatientAppointmentRepository
-                .Setup(repo => repo.IsPatientAvailable(request.PatientId, request.StartAt, request.EndAt))
+                .Setup(repo => repo.IsPatientAvailable(request.PatientId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
                 .Returns(true);
 
             _mockPatientAppointmentRepository
-                .Setup(repo => repo.IsDoctorAvailable(request.DoctorId, request.StartAt, request.EndAt))
+                .Setup(repo => repo.IsDoctorAvailable(request.DoctorId, request.StartAt, AppointmentContants.APPOINTMENT_DURATION_IN_MINUTES))
                 .Returns(true);
 
             _mockPatientAppointmentRepository

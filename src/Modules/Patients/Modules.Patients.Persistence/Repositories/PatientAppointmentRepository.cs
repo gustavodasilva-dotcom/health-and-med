@@ -8,12 +8,20 @@ namespace Modules.Patients.Persistence.Repositories
         Repository<PatientsDbContext, PatientAppointment>(dbContext),
         IPatientAppointmentRepository
     {
-        public bool IsPatientAvailable(Guid patientId, DateTime startAt, DateTime endAt)
-            => !DbContext.PatientAppointments
-                .Any(ap => ap.PatientId == patientId && startAt >= ap.StartAt && endAt <= ap.EndAt);
+        public bool IsPatientAvailable(Guid patientId, DateTime startAt, int appointmentDuration)
+        {
+            return !DbContext.PatientAppointments
+                .Any(ap => ap.PatientId == patientId &&
+                          ap.StartAt < startAt.AddMinutes(appointmentDuration) && // O agendamento existente começa antes do novo terminar
+                          ap.StartAt.AddMinutes(appointmentDuration) > startAt);  // O agendamento existente termina depois do novo começar
+        }
 
-        public bool IsDoctorAvailable(Guid doctorId, DateTime startAt, DateTime endAt)
-            => !DbContext.PatientAppointments
-                .Any(ap => ap.PatientId == doctorId && startAt >= ap.StartAt && endAt <= ap.EndAt);
+        public bool IsDoctorAvailable(Guid doctorId, DateTime startAt, int appointmentDuration)
+        {
+            return !DbContext.PatientAppointments
+                .Any(ap => ap.DoctorId == doctorId &&
+                          ap.StartAt < startAt.AddMinutes(appointmentDuration) && // O agendamento existente começa antes do novo terminar
+                          ap.StartAt.AddMinutes(appointmentDuration) > startAt); // O agendamento existente termina depois do novo começar
+        }
     }
 }
