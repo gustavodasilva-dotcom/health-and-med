@@ -2,11 +2,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /app
 
-COPY ./src ./
-RUN dotnet restore
+COPY ./ ./
+RUN dotnet restore 
 
-COPY ./src ./
-RUN dotnet publish ./App/App.csproj -c Release -o out
+RUN dotnet publish ./src/App/App.csproj -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 

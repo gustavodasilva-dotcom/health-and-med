@@ -28,7 +28,7 @@ spec:
         - name: sqlserver-storage
           mountPath: /var/opt/mssql
         securityContext:
-          runAsUser: 0
+          runAsUser: 10001  
       volumes:
         - name: sqlserver-storage
           persistentVolumeClaim:
