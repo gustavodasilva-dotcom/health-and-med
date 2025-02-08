@@ -29,7 +29,7 @@ public sealed class DenyAppointment : ICarterModule
                 return Results.Ok();
             }
         })
-        .WithTags(AppointmentsRoutes.DenyAppointment)
+        .WithTags(AppointmentsRoutes.Tags)
         .WithMetadata(new AuthorizeAttribute(SecurityPolices.DoctorsOnly))
         .RequireAuthorization();
     }
