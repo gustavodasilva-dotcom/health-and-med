@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: healthandmed
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: healthandmed
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: healthandmed
-        image: localhost:5000/healthandmed:latest
+        image: localhost:5000/health-and-med:latest
         ports:
         - containerPort: 80
         env:

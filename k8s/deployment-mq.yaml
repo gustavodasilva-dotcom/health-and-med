@@ -25,7 +25,7 @@ spec:
         - name: RABBIT_DEFAULT_PASS
           value: "guest"
         volumeMounts:
-        - name: rabbitmq-config
+        - name: mq-config
           mountPath: /etc/rabbitmq/rabbitmq.conf
           subPath: rabbitmq.conf
         command:
@@ -33,6 +33,6 @@ spec:
         - -c
         - rabbitmq-plugins enable rabbitmq_prometheus && rabbitmq-server
       volumes:
-      - name: rabbitmq-config
+      - name: mq-config
         configMap:
-          name: rabbitmq-config
+          name: mq-config
